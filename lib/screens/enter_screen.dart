@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_world/screens/menu_screen.dart';
 import '../widgets/gradient_text.dart';
 
 class EnterScreen extends StatefulWidget {
@@ -8,7 +9,8 @@ class EnterScreen extends StatefulWidget {
   _EnterScreenState createState() => _EnterScreenState();
 }
 
-class _EnterScreenState extends State<EnterScreen> with SingleTickerProviderStateMixin {
+class _EnterScreenState extends State<EnterScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -16,7 +18,9 @@ class _EnterScreenState extends State<EnterScreen> with SingleTickerProviderStat
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500), // Duração de cada ciclo de piscar
+      duration: const Duration(
+        milliseconds: 500,
+      ), // Duração de cada ciclo de piscar
     )..repeat(reverse: true); // Repetir a animação em reverso
   }
 
@@ -28,20 +32,28 @@ class _EnterScreenState extends State<EnterScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.pink,Colors.deepPurpleAccent]),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+    return GestureDetector(
+      onTap: () {Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MenuScreen()),
+      );},
+      child: Scaffold(
+        body: Center(
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF9C156F), Colors.deepPurpleAccent],
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 GradientText(
                   'TRIVIA WORLD',
                   gradient: LinearGradient(
-                    colors: [Colors.white, Colors.red], // Gradiente do branco ao vermelho
+                    colors: [Colors.white, Colors.red],
+                    // Gradiente do branco ao vermelho
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -50,17 +62,18 @@ class _EnterScreenState extends State<EnterScreen> with SingleTickerProviderStat
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              FadeTransition(
-                opacity: _controller,
-                child: Text(
-                  "Toque para continuar",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
+                FadeTransition(
+                  opacity: _controller,
+                  child: Text(
+                    "Toque para continuar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
