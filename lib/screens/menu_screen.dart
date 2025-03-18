@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_world/screens/themes/geral_screen.dart';
 import 'package:trivia_world/widgets/build_theme.dart';
-
+import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -25,7 +26,6 @@ class MenuScreen extends StatelessWidget {
                 'ESCOLHA O TEMA DO QUIZ',
                 gradient: LinearGradient(
                   colors: [Colors.white, Colors.red],
-                  // Gradiente do branco ao vermelho
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -34,12 +34,66 @@ class MenuScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 30,),
-              Row(children: [
-                BuildTheme(image: AssetImage("assets/globe.png",), themeName: "Geral"),
-                BuildTheme(image: AssetImage("assets/movie.png",), themeName: "Filmes"),
-                BuildTheme(image: AssetImage("assets/soccer.png",), themeName: "Futebol"),
-              ],)
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Navega para a tela de Quiz do tema Geral
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                            questions: geralQuestions,
+                            tema: 'Geral',
+                          ),
+                        ),
+                      );
+                    },
+                    child: BuildTheme(
+                      image: AssetImage("assets/globe.png"),
+                      themeName: "Geral",
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Exemplo: outra lista de perguntas
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                            questions: [], // Aqui você coloca a lista de perguntas de Filmes
+                            tema: 'Filmes',
+                          ),
+                        ),
+                      );
+                    },
+                    child: BuildTheme(
+                      image: AssetImage("assets/movie.png"),
+                      themeName: "Filmes",
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Exemplo: outra lista de perguntas
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizScreen(
+                            questions: [], // Aqui você coloca a lista de perguntas de Futebol
+                            tema: 'Futebol',
+                          ),
+                        ),
+                      );
+                    },
+                    child: BuildTheme(
+                      image: AssetImage("assets/soccer.png"),
+                      themeName: "Futebol",
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
