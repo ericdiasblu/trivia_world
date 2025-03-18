@@ -20,6 +20,9 @@ class QuestionService {
           .map((item) => Question.fromJson(item))
           .toList();
 
+      // Aleatoriza as perguntas dessa categoria
+      questions.shuffle();
+
       // Adiciona a lista de perguntas dessa categoria ao mapa
       questionsByCategory[category] = questions;
     });
@@ -31,7 +34,7 @@ class QuestionService {
   Future<List<Question>> loadQuestionsByCategory(String category) async {
     // Carrega o arquivo JSON
     final String response = await rootBundle.loadString('assets/questions.json');
-    final Map<String, dynamic> data = await json.decode(response);
+    final Map<String, dynamic> data = json.decode(response);
 
     // Verifica se a categoria existe
     if (!data.containsKey(category)) {
@@ -43,6 +46,10 @@ class QuestionService {
         .map((item) => Question.fromJson(item))
         .toList();
 
+    // Aleatoriza a ordem das perguntas
+    questions.shuffle();
+
     return questions;
   }
+
 }
