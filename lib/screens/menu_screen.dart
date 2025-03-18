@@ -38,7 +38,7 @@ class MenuScreen extends StatelessWidget {
               Row(children: [
                 BuildTheme(image: AssetImage("assets/globe.png",), themeName: "Geral"),
                 BuildTheme(image: AssetImage("assets/movie.png",), themeName: "Filmes"),
-                BuildTheme(image: AssetImage("assets/soccer.png",), themeName: "Futebo"),
+                BuildTheme(image: AssetImage("assets/soccer.png",), themeName: "Futebol"),
               ],)
             ],
           ),
