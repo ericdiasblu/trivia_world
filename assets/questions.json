@@ -1,0 +1,33 @@
+{
+  "geral": [
+    {
+      "questionText": "Qual é o país com a maior população do mundo?",
+      "answers": ["Indonésia", "China", "Estados Unidos", "Índia"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a capital do Brasil?",
+      "answers": ["Brasília", "São Paulo", "Rio de Janeiro", "Salvador"],
+      "correctAnswerIndex": 0
+    }
+  ],
+  "historia": [
+    {
+      "questionText": "Em que ano começou a Segunda Guerra Mundial?",
+      "answers": ["1939", "1940", "1941", "1945"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quem foi o primeiro presidente do Brasil?",
+      "answers": ["Dom Pedro I", "Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek"],
+      "correctAnswerIndex": 2
+    }
+  ],
+  "ciencia": [
+    {
+      "questionText": "Qual é o elemento químico mais abundante no universo?",
+      "answers": ["Oxigênio", "Carbono", "Hélio", "Hidrogênio"],
+      "correctAnswerIndex": 3
+    }
+  ]
+}
