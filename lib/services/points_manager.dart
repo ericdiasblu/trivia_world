@@ -1,7 +1,14 @@
+import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PointsManager {
   static const String _pointsKey = 'user_points';
+
+  // Stream controller para notificar mudanças de pontos
+  static final _pointsController = StreamController<int>.broadcast();
+
+  // Getter para acessar o stream
+  static Stream<int> get pointsStream => _pointsController.stream;
 
   // Get current points
   static Future<int> getPoints() async {
@@ -15,6 +22,10 @@ class PointsManager {
     final currentPoints = prefs.getInt(_pointsKey) ?? 0;
     final newTotal = currentPoints + points;
     await prefs.setInt(_pointsKey, newTotal);
+
+    // Notificar ouvintes sobre a mudança de pontos
+    _pointsController.add(newTotal);
+
     return newTotal;
   }
 
@@ -55,5 +66,13 @@ class PointsManager {
   static Future<void> resetPoints() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_pointsKey, 0);
+
+    // Notificar ouvintes que os pontos foram resetados
+    _pointsController.add(0);
+  }
+
+  // Dispose do controller quando o app for fechado
+  static void dispose() {
+    _pointsController.close();
   }
 }

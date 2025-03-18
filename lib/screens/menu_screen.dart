@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:trivia_world/screens/question_screen.dart';
 import 'package:trivia_world/widgets/build_theme.dart';
@@ -19,10 +21,27 @@ class _MenuScreenState extends State<MenuScreen> {
   final QuestionService _questionService = QuestionService(); // Nova instância do serviço
   Map<String, List<Question>> _questionsByCategory = {}; // Para armazenar as perguntas carregadas
 
+  StreamSubscription? _pointsSubscription;
+
   @override
   void initState() {
     super.initState();
     _loadResources(); // Carrega pontos e perguntas
+
+    // Inscreva-se para atualizações de pontos
+    _pointsSubscription = PointsManager.pointsStream.listen((points) {
+      if (mounted) {
+        setState(() {
+          userPoints = points;
+        });
+      }
+    });
+
+  }
+  @override
+  void dispose() {
+    _pointsSubscription?.cancel();
+    super.dispose();
   }
 
   // Método para carregar tanto os pontos quanto as perguntas
@@ -212,6 +231,19 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
+  Future<void> _updatePoints() async {
+    try {
+      final points = await PointsManager.getPoints();
+      if (mounted) {
+        setState(() {
+          userPoints = points;
+        });
+      }
+    } catch (e) {
+      print('Erro ao atualizar pontos: $e');
+    }
+  }
+
   // Método para construir os cards de tema com base nas categorias carregadas
   List<Widget> _buildThemeCards() {
     Map<String, Map<String, dynamic>> themeAssets = {
@@ -219,15 +251,15 @@ class _MenuScreenState extends State<MenuScreen> {
         'icon': 'assets/globe.png',
         'color': Color(0xFF4A90E2),
       },
-      'historia': {
+      'história': {
         'icon': 'assets/history.png', // Adicione esta imagem aos seus assets
         'color': Color(0xFFE6526E),
       },
-      'ciencia': {
+      'ciência': {
         'icon': 'assets/science.png', // Adicione esta imagem aos seus assets
         'color': Color(0xFF50C878),
       },
-      'esportes': {
+      'futebol': {
         'icon': 'assets/soccer.png',
         'color': Color(0xFFFF9933),
       },
@@ -276,7 +308,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   tema: category[0].toUpperCase() + category.substring(1),
                 ),
               ),
-            ).then((_) => _loadResources());
+            ).then((_) => _updatePoints());
           },
         ),
       );

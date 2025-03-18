@@ -51,7 +51,7 @@
       "correctAnswerIndex": 2
     }
   ],
-  "historia": [
+  "história": [
     {
       "questionText": "Em que ano começou a Segunda Guerra Mundial?",
       "answers": ["1939", "1940", "1941", "1945"],
@@ -103,7 +103,7 @@
       "correctAnswerIndex": 1
     }
   ],
-  "ciencia": [
+  "ciência": [
     {
       "questionText": "Qual é o elemento químico mais abundante no universo?",
       "answers": ["Oxigênio", "Carbono", "Hélio", "Hidrogênio"],
@@ -153,6 +153,110 @@
       "questionText": "Que partícula subatômica tem carga negativa?",
       "answers": ["Próton", "Nêutron", "Elétron", "Fóton"],
       "correctAnswerIndex": 2
+    }
+  ],
+  "filmes": [
+    {
+      "questionText": "Qual filme ganhou o Oscar de Melhor Filme em 2020?",
+      "answers": ["1917", "Coringa", "Parasita", "Era Uma Vez em Hollywood"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quem interpretou Tony Stark/Homem de Ferro no Universo Cinematográfico Marvel?",
+      "answers": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o filme de maior bilheteria de todos os tempos?",
+      "answers": ["Avatar", "Vingadores: Ultimato", "Titanic", "Star Wars: O Despertar da Força"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quem dirigiu o filme 'Pulp Fiction'?",
+      "answers": ["Martin Scorsese", "Steven Spielberg", "Quentin Tarantino", "Christopher Nolan"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual ator interpretou o Coringa no filme 'O Cavaleiro das Trevas'?",
+      "answers": ["Jack Nicholson", "Jared Leto", "Heath Ledger", "Joaquin Phoenix"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o primeiro filme da saga Harry Potter?",
+      "answers": ["Harry Potter e a Câmara Secreta", "Harry Potter e a Pedra Filosofal", "Harry Potter e o Prisioneiro de Azkaban", "Harry Potter e o Cálice de Fogo"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual atriz protagonizou o filme 'Titanic' junto com Leonardo DiCaprio?",
+      "answers": ["Kate Winslet", "Emma Watson", "Jennifer Lawrence", "Nicole Kidman"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Em que ano foi lançado o primeiro filme da saga Star Wars?",
+      "answers": ["1975", "1977", "1980", "1983"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual personagem é conhecido pela frase 'Até a vista, baby'?",
+      "answers": ["Rambo", "Rocky Balboa", "Exterminador do Futuro", "John McClane"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quem dirigiu o filme 'Jurassic Park'?",
+      "answers": ["James Cameron", "George Lucas", "Steven Spielberg", "Christopher Nolan"],
+      "correctAnswerIndex": 2
+    }
+  ],
+  "futebol": [
+    {
+      "questionText": "Qual seleção venceu a Copa do Mundo de 2018?",
+      "answers": ["Brasil", "Alemanha", "Argentina", "França"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual jogador detém o recorde de mais gols marcados em Copas do Mundo?",
+      "answers": ["Pelé", "Cristiano Ronaldo", "Lionel Messi", "Miroslav Klose"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual clube brasileiro tem mais títulos da Copa Libertadores da América?",
+      "answers": ["Palmeiras", "São Paulo", "Flamengo", "Santos"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em que ano o Brasil conquistou o pentacampeonato mundial?",
+      "answers": ["1994", "1998", "2002", "2006"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual jogador é conhecido como 'O Fenômeno'?",
+      "answers": ["Ronaldinho Gaúcho", "Ronaldo Nazário", "Cristiano Ronaldo", "Neymar"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual time venceu a Champions League na temporada 2022-2023?",
+      "answers": ["Manchester City", "Real Madrid", "Bayern de Munique", "Liverpool"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quantos títulos mundiais tem a Seleção Brasileira de futebol masculino?",
+      "answers": ["4", "5", "6", "7"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual time é conhecido como 'O Mais Querido do Brasil'?",
+      "answers": ["Flamengo", "Corinthians", "São Paulo", "Palmeiras"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual estádio é conhecido como 'La Bombonera'?",
+      "answers": ["Camp Nou", "Santiago Bernabéu", "Estádio do Boca Juniors", "Maracanã"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual jogador marcou o gol do título da Alemanha na Copa do Mundo de 2014?",
+      "answers": ["Thomas Müller", "Mario Götze", "Miroslav Klose", "Toni Kroos"],
+      "correctAnswerIndex": 1
     }
   ]
 }

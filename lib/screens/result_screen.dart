@@ -37,7 +37,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     // Configurar animações
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 1800),
     );
 
     _scoreAnimation = Tween<double>(
@@ -45,7 +45,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
         end: widget.score / widget.totalQuestions
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Interval(0.2, 0.8, curve: Curves.easeOutCubic),
+      curve: const Interval(0.2, 0.8, curve: Curves.easeOutCubic),
     ));
 
     _opacityAnimation = Tween<double>(
@@ -53,7 +53,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Interval(0.4, 1.0, curve: Curves.easeIn),
+      curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
     ));
 
     _scaleAnimation = Tween<double>(
@@ -61,7 +61,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Interval(0.2, 0.8, curve: Curves.elasticOut),
+      curve: const Interval(0.2, 0.8, curve: Curves.elasticOut),
     ));
 
     _loadPoints();
@@ -105,11 +105,11 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
   // Método para obter a cor do resultado com base na porcentagem
   Color getScoreColor(double percentage) {
-    if (percentage >= 0.9) return Color(0xFF00C853); // Verde para excelente
-    if (percentage >= 0.7) return Color(0xFF64DD17); // Verde-limão para muito bom
-    if (percentage >= 0.5) return Color(0xFFFFD600); // Amarelo para médio
-    if (percentage >= 0.3) return Color(0xFFFF9100); // Laranja para regular
-    return Color(0xFFFF3D00); // Vermelho para ruim
+    if (percentage >= 0.9) return const Color(0xFF00C853); // Verde para excelente
+    if (percentage >= 0.7) return const Color(0xFF64DD17); // Verde-limão para muito bom
+    if (percentage >= 0.5) return const Color(0xFFFFD600); // Amarelo para médio
+    if (percentage >= 0.3) return const Color(0xFFFF9100); // Laranja para regular
+    return const Color(0xFFFF3D00); // Vermelho para ruim
   }
 
   // Método para obter ícone baseado na pontuação
@@ -126,10 +126,16 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     final percentage = widget.score / widget.totalQuestions;
     final scoreColor = getScoreColor(percentage);
     final resultIcon = getResultIcon(percentage);
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360;
+    final circleSize = isSmallScreen
+        ? screenSize.width * 0.45
+        : math.min(screenSize.width * 0.5, 200.0);
+    final innerCircleSize = circleSize * 0.75;
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -141,7 +147,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
         ),
         child: SafeArea(
           child: isLoading
-              ? Center(
+              ? const Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -166,8 +172,8 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               // Fundo com partículas decorativas
               ...List.generate(12, (index) {
                 final random = math.Random();
-                final top = random.nextDouble() * MediaQuery.of(context).size.height;
-                final left = random.nextDouble() * MediaQuery.of(context).size.width;
+                final top = random.nextDouble() * screenSize.height;
+                final left = random.nextDouble() * screenSize.width;
                 final size = random.nextDouble() * 15 + 5;
 
                 return Positioned(
@@ -180,8 +186,8 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                       height: size,
                       decoration: BoxDecoration(
                         color: [
-                          Color(0xFFA4045F),
-                          Color(0xFF330066),
+                          const Color(0xFFA4045F),
+                          const Color(0xFF330066),
                           Colors.white,
                         ][random.nextInt(3)],
                         borderRadius: BorderRadius.circular(size),
@@ -194,319 +200,347 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 16),
+                  child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16),
 
-                      // Logo e nome do tema
-                      ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
-                              width: 2,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Trivia World',
-                                style: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 10.0,
-                                      color: Color(0xFFA4045F).withOpacity(0.7),
-                                      offset: Offset(0, 5),
+                            // Logo e nome do tema
+                            ScaleTransition(
+                              scale: _scaleAnimation,
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.3),
+                                    width: 2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFFA4045F).withOpacity(0.2),
+                                      blurRadius: 15,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Trivia World',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: isSmallScreen ? 26 : 32,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                        letterSpacing: 1.2,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 10.0,
+                                            color: const Color(0xFFA4045F).withOpacity(0.7),
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      widget.tema,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: isSmallScreen ? 16 : 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 4),
-                              Text(
-                                widget.tema,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white.withOpacity(0.9),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            ),
 
-                      SizedBox(height: 40),
+                            SizedBox(height: isSmallScreen ? 24 : 40),
 
-                      // Gráfico circular de progresso
-                      AnimatedBuilder(
-                        animation: _scoreAnimation,
-                        builder: (context, child) {
-                          return Container(
-                            width: 200,
-                            height: 200,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Círculo de fundo
-                                Container(
-                                  width: 200,
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.1),
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.3),
-                                      width: 10,
-                                    ),
-                                  ),
-                                ),
+                            // Gráfico circular de progresso
+                            AnimatedBuilder(
+                              animation: _scoreAnimation,
+                              builder: (context, child) {
+                                return Container(
+                                  width: circleSize,
+                                  height: circleSize,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      // Círculo de fundo com efeito de brilho
+                                      Container(
+                                        width: circleSize,
+                                        height: circleSize,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white.withOpacity(0.1),
+                                          border: Border.all(
+                                            color: Colors.white.withOpacity(0.3),
+                                            width: circleSize * 0.05,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.white.withOpacity(0.1),
+                                              blurRadius: 20,
+                                              spreadRadius: 5,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
 
-                                // Progresso circular
-                                CustomPaint(
-                                  size: Size(200, 200),
-                                  painter: CircleProgressPainter(
-                                    progress: _scoreAnimation.value,
-                                    color: scoreColor,
-                                    strokeWidth: 10,
-                                  ),
-                                ),
+                                      // Progresso circular
+                                      CustomPaint(
+                                        size: Size(circleSize, circleSize),
+                                        painter: CircleProgressPainter(
+                                          progress: _scoreAnimation.value,
+                                          color: scoreColor,
+                                          strokeWidth: circleSize * 0.05,
+                                        ),
+                                      ),
 
-                                // Container central com o resultado
-                                Container(
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0xFFA4045F).withOpacity(0.3),
-                                        blurRadius: 20,
-                                        spreadRadius: 5,
+                                      // Container central com o resultado
+                                      Container(
+                                        width: innerCircleSize,
+                                        height: innerCircleSize,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: const Color(0xFFA4045F).withOpacity(0.3),
+                                              blurRadius: 20,
+                                              spreadRadius: 5,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              resultIcon,
+                                              size: isSmallScreen ? 30 : 40,
+                                              color: scoreColor,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${(percentage * 100).toInt()}%",
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 24 : 32,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF330066),
+                                              ),
+                                            ),
+                                            Text(
+                                              "${widget.score}/${widget.totalQuestions}",
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 14 : 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color(0xFF330066).withOpacity(0.8),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
+                                  ),
+                                );
+                              },
+                            ),
+
+                            SizedBox(height: isSmallScreen ? 16 : 24),
+
+                            // Apelido do resultado com efeito de brilho
+                            FadeTransition(
+                              opacity: _opacityAnimation,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: scoreColor.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    color: scoreColor,
+                                    width: 2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: scoreColor.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  getNickname(widget.score, widget.totalQuestions),
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 20 : 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: scoreColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: isSmallScreen ? 24 : 40),
+
+                            // Card de pontos ganhos com efeito de vidro
+                            FadeTransition(
+                              opacity: _opacityAnimation,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFFA4045F),
+                                      Color(0xFFFF1493),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFFA4045F).withOpacity(0.4),
+                                      blurRadius: 15,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        resultIcon,
-                                        size: 40,
-                                        color: scoreColor,
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.add_circle,
+                                            color: Colors.white,
+                                            size: 28,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            "$earnedPoints",
+                                            style: TextStyle(
+                                              fontSize: isSmallScreen ? 28 : 36,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Text(
+                                            " pontos!",
+                                            style: TextStyle(
+                                              fontSize: isSmallScreen ? 20 : 24,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        "${(percentage * 100).toInt()}%",
-                                        style: TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF330066),
+
+                                      const SizedBox(height: 16),
+
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(15),
+                                          border: Border.all(
+                                            color: Colors.white.withOpacity(0.3),
+                                            width: 1,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        "${widget.score}/${widget.totalQuestions}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xFF330066).withOpacity(0.8),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "Total: $totalPoints pontos",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-
-                      SizedBox(height: 24),
-
-                      // Apelido do resultado
-                      FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: scoreColor.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                              color: scoreColor,
-                              width: 2,
-                            ),
-                          ),
-                          child: Text(
-                            getNickname(widget.score, widget.totalQuestions),
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: scoreColor,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 40),
-
-                      // Card de pontos ganhos
-                      FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xFFA4045F),
-                                Color(0xFFFF1493),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFFA4045F).withOpacity(0.4),
-                                blurRadius: 15,
-                                offset: Offset(0, 8),
                               ),
-                            ],
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_circle,
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      "$earnedPoints",
-                                      style: TextStyle(
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      " pontos!",
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
 
-                                SizedBox(height: 16),
+                            SizedBox(height: isSmallScreen ? 24 : 40),
 
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                        size: 20,
+                            // Botões de ação com efeito de pressão
+                            FadeTransition(
+                              opacity: _opacityAnimation,
+                              child: Column(
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.replay, color: Colors.white),
+                                    label: const Text('Jogar Novamente'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFF1493),
+                                      foregroundColor: Colors.white,
+                                      padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 12 : 16, horizontal: 20),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
                                       ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        "Total: $totalPoints pontos",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
+                                      elevation: 5,
+                                      shadowColor: const Color(0xFFFF1493).withOpacity(0.5),
+                                      minimumSize: const Size(double.infinity, 50),
+                                    ),
+                                    onPressed: () {
+                                      // Efeito de pressão antes de chamar o callback
+                                      Future.delayed(const Duration(milliseconds: 100), widget.onPlayAgain);
+                                    },
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
 
-                      SizedBox(height: 40),
+                            const SizedBox(height: 16),
 
-                      // Botões de ação
-                      FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: Row(
-                          children: [
-                            Expanded(
+                            FadeTransition(
+                              opacity: _opacityAnimation,
                               child: ElevatedButton.icon(
-                                icon: Icon(Icons.replay,color: Colors.white,),
-                                label: Text('Jogar Novamente'),
+                                icon: const Icon(Icons.home, color: Colors.white),
+                                label: const Text('Voltar ao Menu'),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFFF1493),
+                                  backgroundColor: const Color(0xFFA4045F),
                                   foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 12 : 16, horizontal: 20),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   elevation: 5,
-                                  shadowColor: Color(0xFFFF1493).withOpacity(0.5),
-                                ),
-                                onPressed: widget.onPlayAgain,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(height: 16),
-
-                      FadeTransition(
-                        opacity: _opacityAnimation,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                icon: Icon(Icons.home,color: Colors.white,),
-                                label: Text('Voltar ao Menu'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFA4045F),
-                                  foregroundColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  elevation: 5,
-                                  shadowColor: Color(0xFFA4045F).withOpacity(0.5),
+                                  shadowColor: const Color(0xFFA4045F).withOpacity(0.5),
+                                  minimumSize: const Size(double.infinity, 50),
                                 ),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                               ),
                             ),
-                          ],
-                        ),
-                      ),
 
-                      SizedBox(height: 20),
-                    ],
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      }
                   ),
                 ),
               ),
@@ -534,20 +568,57 @@ class CircleProgressPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = math.min(size.width, size.height) / 2 - strokeWidth / 2;
+
+    // Glow effect background
+    final glowPaint = Paint()
+      ..color = color.withOpacity(0.2)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth + 6
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -math.pi / 2,  // Começa do topo
+      2 * math.pi * progress,  // Progresso completo
+      false,
+      glowPaint,
+    );
+
+    // Main progress arc
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
-    // Desenha o arco de progresso
+    // Draw little dots at the beginning and the end of the arc
+    final startAngle = -math.pi / 2;
+    final endAngle = startAngle + (2 * math.pi * progress);
+
+    // Draw the main arc
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,  // Começa do topo
-      2 * math.pi * progress,  // Progresso completo
+      startAngle,
+      endAngle - startAngle,
       false,
       paint,
     );
+
+    // Add a dot at the end of the progress arc (if not complete)
+    if (progress > 0 && progress < 1) {
+      final dotPaint = Paint()
+        ..color = color
+        ..style = PaintingStyle.fill;
+
+      final dotX = center.dx + radius * math.cos(endAngle);
+      final dotY = center.dy + radius * math.sin(endAngle);
+
+      canvas.drawCircle(
+        Offset(dotX, dotY),
+        strokeWidth / 1.5,
+        dotPaint,
+      );
+    }
   }
 
   @override
