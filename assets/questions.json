@@ -9,6 +9,46 @@
       "questionText": "Qual é a capital do Brasil?",
       "answers": ["Brasília", "São Paulo", "Rio de Janeiro", "Salvador"],
       "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual a montanha mais alta do mundo?",
+      "answers": ["Monte Everest", "K2", "Kangchenjunga", "Mont Blanc"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Em que continente fica o Deserto do Saara?",
+      "answers": ["África", "Ásia", "América do Sul", "Europa"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quantos lados tem um hexágono?",
+      "answers": ["4", "5", "6", "8"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o maior oceano do mundo?",
+      "answers": ["Oceano Atlântico", "Oceano Pacífico", "Oceano Índico", "Oceano Ártico"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual desses animais é um mamífero?",
+      "answers": ["Crocodilo", "Golfinho", "Tubarão", "Pinguim"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a moeda oficial do Japão?",
+      "answers": ["Yen", "Dólar", "Euro", "Won"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual é o planeta mais próximo do Sol?",
+      "answers": ["Marte", "Vênus", "Mercúrio", "Terra"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quantas cores tem o arco-íris tradicionalmente?",
+      "answers": ["5", "6", "7", "8"],
+      "correctAnswerIndex": 2
     }
   ],
   "historia": [
@@ -21,6 +61,46 @@
       "questionText": "Quem foi o primeiro presidente do Brasil?",
       "answers": ["Dom Pedro I", "Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek"],
       "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em que ano o Brasil foi 'descoberto' pelos portugueses?",
+      "answers": ["1500", "1492", "1520", "1549"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quem foi o responsável pela Independência do Brasil em 1822?",
+      "answers": ["Dom Pedro I", "Dom Pedro II", "Tiradentes", "José Bonifácio"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual civilização construiu as pirâmides de Gizé?",
+      "answers": ["Sumérios", "Astecas", "Egípcios", "Maias"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quem pintou a Mona Lisa?",
+      "answers": ["Michelangelo", "Leonardo da Vinci", "Rafael", "Donatello"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual cidade foi destruída pela erupção do vulcão Vesúvio em 79 d.C.?",
+      "answers": ["Pompeia", "Roma", "Cartago", "Alexandria"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Em que cidade foram realizados os primeiros Jogos Olímpicos da era moderna, em 1896?",
+      "answers": ["Paris", "Londres", "Atenas", "Berlim"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual era o nome do imperador romano que se converteu ao cristianismo e proclamou o Édito de Milão em 313 d.C.?",
+      "answers": ["Constantino", "Nero", "Augusto", "Trajano"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual império tinha a cidade de Tenochtitlán como capital?",
+      "answers": ["Inca", "Asteca", "Maya", "Olmeca"],
+      "correctAnswerIndex": 1
     }
   ],
   "ciencia": [
@@ -28,6 +108,51 @@
       "questionText": "Qual é o elemento químico mais abundante no universo?",
       "answers": ["Oxigênio", "Carbono", "Hélio", "Hidrogênio"],
       "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Quantos planetas existem no Sistema Solar (excluindo Plutão)?",
+      "answers": ["7", "8", "9", "10"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a velocidade da luz no vácuo aproximadamente?",
+      "answers": ["300.000 km/h", "300.000 km/s", "30.000 km/s", "300 km/s"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Que tipo de sangue é considerado doador universal?",
+      "answers": ["A+", "B+", "O-", "AB+"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual cientista propôs a teoria da relatividade?",
+      "answers": ["Isaac Newton", "Albert Einstein", "Galileu Galilei", "Niels Bohr"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o maior órgão do corpo humano?",
+      "answers": ["Fígado", "Coração", "Pele", "Pulmão"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Como se chama a mudança do estado sólido para o estado gasoso, sem passar pelo estado líquido?",
+      "answers": ["Fusão", "Evaporação", "Sublimação", "Condensação"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual planeta é conhecido como 'Planeta Vermelho'?",
+      "answers": ["Vênus", "Marte", "Júpiter", "Saturno"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a principal fonte de energia para o planeta Terra?",
+      "answers": ["Petróleo", "Sol", "Carvão", "Eletricidade"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Que partícula subatômica tem carga negativa?",
+      "answers": ["Próton", "Nêutron", "Elétron", "Fóton"],
+      "correctAnswerIndex": 2
     }
   ]
 }
