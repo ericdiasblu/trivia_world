@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_world/screens/themes/geral_screen.dart';
+import 'package:trivia_world/screens/question_screen.dart';
 import 'package:trivia_world/widgets/build_theme.dart';
 import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
+import '../services/question_service.dart'; // Novo import para o serviço de perguntas
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -15,20 +16,38 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int userPoints = 0;
   bool isLoading = true;
+  final QuestionService _questionService = QuestionService(); // Nova instância do serviço
+  Map<String, List<Question>> _questionsByCategory = {}; // Para armazenar as perguntas carregadas
 
   @override
   void initState() {
     super.initState();
-    _loadPoints();
+    _loadResources(); // Carrega pontos e perguntas
   }
 
-  Future<void> _loadPoints() async {
-    final points = await PointsManager.getPoints();
-    if (mounted) {
-      setState(() {
-        userPoints = points;
-        isLoading = false;
-      });
+  // Método para carregar tanto os pontos quanto as perguntas
+  Future<void> _loadResources() async {
+    try {
+      // Carrega os pontos
+      final points = await PointsManager.getPoints();
+
+      // Carrega as categorias e perguntas
+      final questionsByCategory = await _questionService.loadAllQuestions();
+
+      if (mounted) {
+        setState(() {
+          userPoints = points;
+          _questionsByCategory = questionsByCategory;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Erro ao carregar recursos: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -164,67 +183,21 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                       SizedBox(height: 20),
 
-                      // Grid de temas ao invés de Row
+                      // Grid de temas com perguntas carregadas do JSON
                       Expanded(
-                        child: Padding(
+                        child: isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                            : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: GridView.count(
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            children: [
-                              buildThemeCard(
-                                context,
-                                'Geral',
-                                'assets/globe.png',
-                                Color(0xFF4A90E2),
-                                    () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => QuizScreen(
-                                        questions: geralQuestions,
-                                        tema: 'Geral',
-                                      ),
-                                    ),
-                                  ).then((_) => _loadPoints());
-                                },
-                              ),
-                              buildThemeCard(
-                                context,
-                                'Filmes',
-                                'assets/movie.png',
-                                Color(0xFFE6526E),
-                                    () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => QuizScreen(
-                                        questions: [],
-                                        tema: 'Filmes',
-                                      ),
-                                    ),
-                                  ).then((_) => _loadPoints());
-                                },
-                              ),
-                              buildThemeCard(
-                                context,
-                                'Futebol',
-                                'assets/soccer.png',
-                                Color(0xFF50C878),
-                                    () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => QuizScreen(
-                                        questions: [],
-                                        tema: 'Futebol',
-                                      ),
-                                    ),
-                                  ).then((_) => _loadPoints());
-                                },
-                              ),
-                            ],
+                            children: _buildThemeCards(),
                           ),
                         ),
                       ),
@@ -239,5 +212,76 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
+  // Método para construir os cards de tema com base nas categorias carregadas
+  List<Widget> _buildThemeCards() {
+    Map<String, Map<String, dynamic>> themeAssets = {
+      'geral': {
+        'icon': 'assets/globe.png',
+        'color': Color(0xFF4A90E2),
+      },
+      'historia': {
+        'icon': 'assets/history.png', // Adicione esta imagem aos seus assets
+        'color': Color(0xFFE6526E),
+      },
+      'ciencia': {
+        'icon': 'assets/science.png', // Adicione esta imagem aos seus assets
+        'color': Color(0xFF50C878),
+      },
+      'esportes': {
+        'icon': 'assets/soccer.png',
+        'color': Color(0xFFFF9933),
+      },
+      'filmes': {
+        'icon': 'assets/movie.png',
+        'color': Color(0xFF9966CC),
+      },
+    };
 
+    // Se não houver categorias carregadas, mostre uma mensagem
+    if (_questionsByCategory.isEmpty) {
+      return [
+        Center(
+          child: Text(
+            'Nenhum tema disponível',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+        )
+      ];
+    }
+
+    // Cria um card para cada categoria disponível
+    List<Widget> themeCards = [];
+    _questionsByCategory.forEach((category, questions) {
+      // Usa o mapeamento padrão ou um fallback
+      final themeData = themeAssets[category] ?? {
+        'icon': 'assets/globe.png', // Ícone padrão
+        'color': Color(0xFF4A90E2), // Cor padrão
+      };
+
+      themeCards.add(
+        buildThemeCard(
+          context,
+          category[0].toUpperCase() + category.substring(1), // Primeira letra maiúscula
+          themeData['icon'],
+          themeData['color'],
+              () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => QuizScreen(
+                  questions: questions,
+                  tema: category[0].toUpperCase() + category.substring(1),
+                ),
+              ),
+            ).then((_) => _loadResources());
+          },
+        ),
+      );
+    });
+
+    return themeCards;
   }
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../../models/question.dart';
-import '../result_screen.dart';
+import '../models/question.dart';
+import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   final List<Question> questions;

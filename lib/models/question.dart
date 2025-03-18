@@ -8,19 +8,13 @@ class Question {
     required this.answers,
     required this.correctAnswerIndex,
   });
+
+  // Método para criar uma Question a partir de um Map (JSON)
+  factory Question.fromJson(Map<String, dynamic> json) {
+    return Question(
+      questionText: json['questionText'],
+      answers: List<String>.from(json['answers']),
+      correctAnswerIndex: json['correctAnswerIndex'],
+    );
+  }
 }
-
-final List<Question> geralQuestions = [
-  Question(
-    questionText: "Qual é o país com a maior população do mundo?",
-    answers: ["Indonésia", "China", "Estados Unidos", "Índia"],
-    correctAnswerIndex: 1, // Índice 1 = "China" (ou 3 se considerar "Índia" a correta)
-  ),
-  Question(
-    questionText: "Qual é a capital do Brasil?",
-    answers: ["Brasília", "São Paulo", "Rio de Janeiro", "Salvador"],
-    correctAnswerIndex: 0,
-  ),
-  // Adicione mais perguntas aqui...
-];
-
