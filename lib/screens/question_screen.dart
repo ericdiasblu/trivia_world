@@ -24,6 +24,8 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
   int selectedAnswerIndex = -1;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  late List<Question> _questions;
+
 
   // Adicionar variáveis para o temporizador
   late Timer _timer;
@@ -33,6 +35,10 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+
+    // Garantir que estamos usando as perguntas randomizadas
+    _questions = widget.questions;
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1500),
@@ -98,7 +104,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
     // Cancelar o temporizador atual
     _timer.cancel();
 
-    if (currentQuestionIndex >= widget.questions.length - 1) {
+    if (currentQuestionIndex >= _questions.length - 1) {
       showResultScreen();
     } else {
       setState(() {
@@ -120,7 +126,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
       MaterialPageRoute(
         builder: (context) => ResultScreen(
           score: score,
-          totalQuestions: widget.questions.length,
+          totalQuestions: _questions.length,
           tema: widget.tema,
           onPlayAgain: () {
             Navigator.pushReplacement(
@@ -140,7 +146,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    if (widget.questions.isEmpty) {
+    if (_questions.isEmpty) {
       return Scaffold(
         body: Container(
           decoration: BoxDecoration(
@@ -191,8 +197,8 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
       );
     }
 
-    final question = widget.questions[currentQuestionIndex];
-    final progress = (currentQuestionIndex + 1) / widget.questions.length;
+    final question = _questions[currentQuestionIndex];
+    final progress = (currentQuestionIndex + 1) / _questions.length;
 
     return Scaffold(
       body: Container(

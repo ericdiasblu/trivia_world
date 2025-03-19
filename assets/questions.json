@@ -49,6 +49,106 @@
       "questionText": "Quantas cores tem o arco-íris tradicionalmente?",
       "answers": ["5", "6", "7", "8"],
       "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o segundo maior continente do mundo em área?",
+      "answers": ["África", "Europa", "América do Norte", "Ásia"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual destas não é uma das Sete Maravilhas do Mundo Moderno?",
+      "answers": ["Cristo Redentor", "Torre Eiffel", "Coliseu", "Taj Mahal"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o idioma mais falado no mundo em número de falantes nativos?",
+      "answers": ["Inglês", "Espanhol", "Mandarim", "Hindi"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é a maior floresta tropical do mundo?",
+      "answers": ["Floresta Amazônica", "Floresta do Congo", "Floresta de Bornéu", "Floresta de Daintree"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual é o metal mais precioso do mundo?",
+      "answers": ["Ouro", "Prata", "Platina", "Ródio"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual é o segundo país mais populoso do mundo?",
+      "answers": ["Estados Unidos", "China", "Indonésia", "Paquistão"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o rio mais comprido do mundo?",
+      "answers": ["Rio Amazonas", "Rio Nilo", "Rio Yangtzé", "Rio Mississipi"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual destes países não faz parte do Reino Unido?",
+      "answers": ["Escócia", "País de Gales", "Irlanda", "Inglaterra"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é a capital da Austrália?",
+      "answers": ["Sydney", "Melbourne", "Canberra", "Perth"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o menor país do mundo em área?",
+      "answers": ["Mônaco", "Nauru", "Vaticano", "Liechtenstein"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual destes não é um dos cinco sentidos humanos tradicionais?",
+      "answers": ["Visão", "Audição", "Equilíbrio", "Tato"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quantos estados tem o Brasil?",
+      "answers": ["25", "26", "27", "28"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a capital do Canadá?",
+      "answers": ["Toronto", "Vancouver", "Montreal", "Ottawa"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual é o instrumento musical que tem 88 teclas?",
+      "answers": ["Órgão", "Acordeão", "Piano", "Sintetizador"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o animal terrestre mais rápido do mundo?",
+      "answers": ["Leopardo", "Guepardo", "Tigre", "Antílope"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a menor unidade de informação em computação?",
+      "answers": ["Byte", "Kilobyte", "Bit", "Megabyte"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual destes é um polígono de sete lados?",
+      "answers": ["Pentágono", "Hexágono", "Heptágono", "Octógono"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual oceano banha a costa leste do Brasil?",
+      "answers": ["Oceano Pacífico", "Oceano Índico", "Oceano Atlântico", "Oceano Ártico"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é a maior ilha do mundo?",
+      "answers": ["Madagascar", "Groenlândia", "Nova Guiné", "Bornéu"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual destes países não está localizado na Europa?",
+      "answers": ["Dinamarca", "Grécia", "Turquia", "Suécia"],
+      "correctAnswerIndex": 2
     }
   ],
   "história": [
@@ -101,6 +201,106 @@
       "questionText": "Qual império tinha a cidade de Tenochtitlán como capital?",
       "answers": ["Inca", "Asteca", "Maya", "Olmeca"],
       "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quem foi o líder da Revolução Cubana em 1959?",
+      "answers": ["Che Guevara", "Raúl Castro", "Fidel Castro", "Fulgencio Batista"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em que ano caiu o Muro de Berlim?",
+      "answers": ["1985", "1989", "1991", "1993"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual foi o primeiro imperador do Brasil?",
+      "answers": ["Dom Pedro I", "Dom Pedro II", "Dom João VI", "Dom Manuel I"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quem foi o líder soviético durante a crise dos mísseis de Cuba em 1962?",
+      "answers": ["Joseph Stalin", "Nikita Khrushchev", "Leonid Brezhnev", "Vladimir Lenin"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual evento marcou o início da Primeira Guerra Mundial em 1914?",
+      "answers": ["Invasão da Polônia", "Ataque a Pearl Harbor", "Assassinato do arquiduque Francisco Ferdinando", "Queda da Bastilha"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em que ano ocorreu a Revolução Francesa?",
+      "answers": ["1776", "1789", "1804", "1812"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quem foi o primeiro homem a pisar na Lua?",
+      "answers": ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "Alan Shepard"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual foi o período da ditadura militar no Brasil?",
+      "answers": ["1954-1984", "1964-1985", "1968-1989", "1974-1995"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em que ano foi assinada a Declaração de Independência dos Estados Unidos?",
+      "answers": ["1776", "1783", "1789", "1792"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quem foi o famoso navegador português que chegou à Índia contornando a África?",
+      "answers": ["Cristóvão Colombo", "Pedro Álvares Cabral", "Vasco da Gama", "Fernão de Magalhães"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual civilização construiu a cidade de Machu Picchu?",
+      "answers": ["Astecas", "Maias", "Incas", "Olmecas"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quem foi o imperador romano que incendiou Roma?",
+      "answers": ["Calígula", "Nero", "Augusto", "César"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em que ano terminou a Segunda Guerra Mundial?",
+      "answers": ["1943", "1944", "1945", "1946"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual foi o nome da primeira bomba atômica lançada em Hiroshima?",
+      "answers": ["Fat Man", "Little Boy", "Trinity", "Big Bang"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quem foi o responsável pela Inconfidência Mineira no Brasil?",
+      "answers": ["Tiradentes", "Zumbi dos Palmares", "Duque de Caxias", "Dom Pedro I"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual rei inglês teve seis esposas?",
+      "answers": ["Henrique VII", "Henrique VIII", "Ricardo III", "Eduardo VI"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em que ano foi proclamada a República no Brasil?",
+      "answers": ["1888", "1889", "1891", "1894"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quem foi o primeiro presidente dos Estados Unidos?",
+      "answers": ["Thomas Jefferson", "Benjamin Franklin", "George Washington", "Abraham Lincoln"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual foi o maior império territorial da história?",
+      "answers": ["Império Britânico", "Império Mongol", "Império Romano", "Império Espanhol"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Em que ano ocorreu a Abolição da Escravatura no Brasil?",
+      "answers": ["1822", "1850", "1888", "1889"],
+      "correctAnswerIndex": 2
     }
   ],
   "ciência": [
@@ -152,6 +352,106 @@
     {
       "questionText": "Que partícula subatômica tem carga negativa?",
       "answers": ["Próton", "Nêutron", "Elétron", "Fóton"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é a unidade básica de estrutura e função dos seres vivos?",
+      "answers": ["Átomo", "Molécula", "Célula", "Tecido"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o processo pelo qual as plantas produzem seu próprio alimento?",
+      "answers": ["Respiração", "Fotossíntese", "Digestão", "Transpiração"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o gás mais abundante na atmosfera terrestre?",
+      "answers": ["Oxigênio", "Nitrogênio", "Dióxido de carbono", "Argônio"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "O que mede a escala Richter?",
+      "answers": ["Temperatura", "Velocidade do vento", "Intensidade de terremotos", "Altitude"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual destes não é um tipo de radiação?",
+      "answers": ["Alfa", "Beta", "Gama", "Delta"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual é a principal função dos glóbulos brancos no sangue?",
+      "answers": ["Transportar oxigênio", "Combater infecções", "Coagulação sanguínea", "Produzir anticorpos"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a menor partícula de um elemento que mantém suas propriedades químicas?",
+      "answers": ["Átomo", "Molécula", "Elétron", "Próton"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "O que estuda a entomologia?",
+      "answers": ["Répteis", "Insetos", "Rochas", "Fungos"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é a unidade de medida de força no Sistema Internacional?",
+      "answers": ["Watt", "Joule", "Newton", "Pascal"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual cientista formulou as leis do movimento e a lei da gravitação universal?",
+      "answers": ["Galileu Galilei", "Isaac Newton", "Albert Einstein", "Johannes Kepler"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "O DNA é formado por quantas fitas?",
+      "answers": ["Uma", "Duas", "Três", "Quatro"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o elemento químico com símbolo Fe?",
+      "answers": ["Ferro", "Flúor", "Fósforo", "Frâncio"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "A que temperatura (em graus Celsius) a água ferve ao nível do mar?",
+      "answers": ["90°C", "95°C", "100°C", "110°C"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome do processo de divisão celular que resulta em células geneticamente idênticas?",
+      "answers": ["Meiose", "Mitose", "Citose", "Citocinese"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o nome da maior lua de Saturno?",
+      "answers": ["Europa", "Tritão", "Titã", "Calisto"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o osso mais longo do corpo humano?",
+      "answers": ["Úmero", "Fêmur", "Tíbia", "Fíbula"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual doença é causada pela deficiência de vitamina C?",
+      "answers": ["Raquitismo", "Beribéri", "Escorbuto", "Pelagra"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Que fenômeno explica por que o céu é azul?",
+      "answers": ["Refração da luz", "Dispersão de Rayleigh", "Efeito Doppler", "Difração da luz"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o único satélite natural da Terra?",
+      "answers": ["Fobos", "Deimos", "Lua", "Titã"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "O que é um tsunami?",
+      "answers": ["Furacão oceânico", "Ciclone tropical", "Onda gigante causada por terremoto", "Tempestade elétrica"],
       "correctAnswerIndex": 2
     }
   ],
@@ -205,8 +505,98 @@
       "questionText": "Quem dirigiu o filme 'Jurassic Park'?",
       "answers": ["James Cameron", "George Lucas", "Steven Spielberg", "Christopher Nolan"],
       "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual filme de animação da Disney tem como protagonista um leão chamado Simba?",
+      "answers": ["Tarzan", "O Rei Leão", "Aladin", "A Pequena Sereia"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual ator interpretou o Capitão Jack Sparrow na série 'Piratas do Caribe'?",
+      "answers": ["Orlando Bloom", "Johnny Depp", "Geoffrey Rush", "Bill Nighy"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual foi o primeiro filme totalmente animado por computador?",
+      "answers": ["Shrek", "Formiguinhaz", "Toy Story", "Monstros S.A."],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome do protagonista da trilogia 'Matrix'?",
+      "answers": ["Morpheus", "Neo", "Trinity", "Smith"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual destes filmes NÃO foi dirigido por Christopher Nolan?",
+      "answers": ["Interestelar", "A Origem", "O Resgate do Soldado Ryan", "Dunkirk"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Quantos filmes existem na saga principal de Star Wars (episódios numerados)?",
+      "answers": ["6", "8", "9", "10"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual atriz interpreta Katniss Everdeen nos filmes 'Jogos Vorazes'?",
+      "answers": ["Emma Watson", "Jennifer Lawrence", "Shailene Woodley", "Kristen Stewart"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual filme ganhou o Oscar de Melhor Filme em 2019?",
+      "answers": ["Nasce Uma Estrela", "Green Book", "Roma", "Pantera Negra"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o nome da escola de magia em Harry Potter?",
+      "answers": ["Ilvermorny", "Durmstrang", "Beauxbatons", "Hogwarts"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual ator interpretou James Bond por mais tempo?",
+      "answers": ["Sean Connery", "Roger Moore", "Daniel Craig", "Pierce Brosnan"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual personagem diz a famosa frase 'May the Force be with you' (Que a força esteja com você)?",
+      "answers": ["Luke Skywalker", "Obi-Wan Kenobi", "Yoda", "Han Solo"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o nome da protagonista feminina do filme 'Titanic'?",
+      "answers": ["Rose DeWitt Bukater", "Molly Brown", "Ruth DeWitt Bukater", "Cora Cartmell"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual dos seguintes filmes NÃO faz parte do Universo Cinematográfico Marvel?",
+      "answers": ["Homem-Aranha: De Volta ao Lar", "Homem de Ferro", "Vingadores", "Coringa"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Quem dirigiu o filme 'E.T. - O Extraterrestre'?",
+      "answers": ["George Lucas", "James Cameron", "Steven Spielberg", "Ridley Scott"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual filme conta a história de um barco caçador de tubarões chamado Orca?",
+      "answers": ["Tubarão", "Mar em Fúria", "Poseidon", "Águas Profundas"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual foi o primeiro filme da Marvel Studios?",
+      "answers": ["X-Men", "Homem-Aranha", "Homem de Ferro", "Capitão América: O Primeiro Vingador"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome da protagonista da série de filmes 'Resident Evil'?",
+      "answers": ["Claire Redfield", "Jill Valentine", "Alice", "Ada Wong"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em 'De Volta Para o Futuro', qual é a velocidade que o DeLorean precisa atingir para viajar no tempo?",
+      "answers": ["80 mph", "88 mph", "100 mph", "120 mph"],
+      "correctAnswerIndex": 1
     }
-  ],
+    ],
   "futebol": [
     {
       "questionText": "Qual seleção venceu a Copa do Mundo de 2018?",
@@ -257,6 +647,106 @@
       "questionText": "Qual jogador marcou o gol do título da Alemanha na Copa do Mundo de 2014?",
       "answers": ["Thomas Müller", "Mario Götze", "Miroslav Klose", "Toni Kroos"],
       "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogador brasileiro é o maior artilheiro da história da seleção brasileira?",
+      "answers": ["Pelé", "Romário", "Ronaldo", "Neymar"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual equipe conquistou mais vezes a Copa Libertadores da América?",
+      "answers": ["River Plate", "Boca Juniors", "Independiente", "Peñarol"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em que ano foi fundada a FIFA (Federação Internacional de Futebol)?",
+      "answers": ["1900", "1904", "1908", "1912"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o jogador com mais Bolas de Ouro na história?",
+      "answers": ["Pelé", "Diego Maradona", "Lionel Messi", "Cristiano Ronaldo"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual país sediou a Copa do Mundo de 2014?",
+      "answers": ["África do Sul", "Brasil", "Rússia", "Catar"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual time inglês tem mais títulos da Premier League?",
+      "answers": ["Liverpool", "Manchester United", "Chelsea", "Arsenal"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Quantos jogadores uma equipe de futebol tem em campo?",
+      "answers": ["9", "10", "11", "12"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o estádio do Real Madrid?",
+      "answers": ["Camp Nou", "Santiago Bernabéu", "Wanda Metropolitano", "Old Trafford"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o país com mais títulos da Copa do Mundo?",
+      "answers": ["Alemanha", "Itália", "Argentina", "Brasil"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual jogador é conhecido como 'O Rei do Futebol'?",
+      "answers": ["Pelé", "Maradona", "Zidane", "Ronaldo"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Quem foi o técnico da seleção brasileira campeã do mundo em 2002?",
+      "answers": ["Felipão", "Parreira", "Zagallo", "Tite"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual clube italiano tem mais títulos do Campeonato Italiano (Serie A)?",
+      "answers": ["Milan", "Internazionale", "Roma", "Juventus"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual é o nome do troféu dado ao campeão da Liga dos Campeões da UEFA?",
+      "answers": ["Taça Europeia", "Orelhuda", "Taça dos Campeões", "Copa UEFA"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual seleção venceu a primeira Copa do Mundo em 1930?",
+      "answers": ["Brasil", "Argentina", "Uruguai", "Itália"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual jogador marcou o famoso gol de mão, conhecido como 'La Mano de Dios'?",
+      "answers": ["Pelé", "Maradona", "Messi", "Batistuta"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em qual time Cristiano Ronaldo jogou antes de ir para o Real Madrid?",
+      "answers": ["Sporting Lisboa", "Benfica", "Manchester United", "Juventus"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o maior artilheiro da história da Champions League?",
+      "answers": ["Lionel Messi", "Cristiano Ronaldo", "Raúl González", "Robert Lewandowski"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual time é conhecido como 'Alvinegro Praiano'?",
+      "answers": ["Corinthians", "Santos", "Botafogo", "Vasco da Gama"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual país sediará a Copa do Mundo de 2026?",
+      "answers": ["Estados Unidos, México e Canadá", "Brasil", "Espanha e Portugal", "Argentina e Uruguai"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual clube ganhou a primeira edição do Campeonato Brasileiro (1971)?",
+      "answers": ["Santos", "Flamengo", "Atlético Mineiro", "São Paulo"],
+      "correctAnswerIndex": 2
     }
   ]
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/question.dart';
 import '../../services/points_manager.dart';
+import '../../services/question_service.dart'; // Added this import
 import 'dart:math' as math;
 
 class ResultScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   late Animation<double> _scoreAnimation;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
+  final QuestionService _questionService = QuestionService(); // Added question service
 
   @override
   void initState() {
@@ -119,6 +121,55 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     if (percentage >= 0.5) return Icons.thumb_up;
     if (percentage >= 0.3) return Icons.sentiment_satisfied;
     return Icons.school;
+  }
+
+  // Novo método para randomizar as questões e jogar novamente
+  Future<void> _playAgainWithRandomQuestions() async {
+    // Mostrar indicador de loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      ),
+    );
+
+    try {
+      // Carregar e randomizar questões para a categoria atual
+      final String categoryName = widget.tema.toLowerCase();
+      print('Carregando novas questões para: $categoryName'); // Debugging log
+
+      // Carregar novas questões randomizadas
+      List<Question> newQuestions = await _questionService.loadQuestionsByCategory(categoryName);
+      print('Novas questões carregadas: ${newQuestions.length}'); // Debugging log
+
+      // Remover o diálogo de loading
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+
+      // Chamar o callback original para jogar novamente
+      widget.onPlayAgain();
+    } catch (e) {
+      print('ERRO: $e'); // Debugging log
+
+      // Remover o diálogo de loading em caso de erro
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+
+      // Mostrar mensagem de erro
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao carregar novas questões: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -485,7 +536,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
 
                             SizedBox(height: isSmallScreen ? 24 : 40),
 
-                            // Botões de ação com efeito de pressão
+                            // Botões de ação com efeito de pressão - MODIFICADO PARA USAR O MÉTODO NOVO
                             FadeTransition(
                               opacity: _opacityAnimation,
                               child: Column(
@@ -505,8 +556,8 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                                       minimumSize: const Size(double.infinity, 50),
                                     ),
                                     onPressed: () {
-                                      // Efeito de pressão antes de chamar o callback
-                                      Future.delayed(const Duration(milliseconds: 100), widget.onPlayAgain);
+                                      // Chama o novo método que randomiza as questões
+                                      _playAgainWithRandomQuestions();
                                     },
                                   ),
                                 ],

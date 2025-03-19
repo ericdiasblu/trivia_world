@@ -6,7 +6,7 @@ import 'package:trivia_world/widgets/build_theme.dart';
 import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
-import '../services/question_service.dart'; // Novo import para o serviço de perguntas
+import '../services/question_service.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -18,15 +18,15 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int userPoints = 0;
   bool isLoading = true;
-  final QuestionService _questionService = QuestionService(); // Nova instância do serviço
-  Map<String, List<Question>> _questionsByCategory = {}; // Para armazenar as perguntas carregadas
+  final QuestionService _questionService = QuestionService();
+  Map<String, List<Question>> _questionsByCategory = {};
 
   StreamSubscription? _pointsSubscription;
 
   @override
   void initState() {
     super.initState();
-    _loadResources(); // Carrega pontos e perguntas
+    _loadResources();
 
     // Inscreva-se para atualizações de pontos
     _pointsSubscription = PointsManager.pointsStream.listen((points) {
@@ -36,21 +36,21 @@ class _MenuScreenState extends State<MenuScreen> {
         });
       }
     });
-
   }
+
   @override
   void dispose() {
     _pointsSubscription?.cancel();
     super.dispose();
   }
 
-  // Método para carregar tanto os pontos quanto as perguntas
+  // Método para carregar tanto os pontos quanto as categorias de perguntas
   Future<void> _loadResources() async {
     try {
       // Carrega os pontos
       final points = await PointsManager.getPoints();
 
-      // Carrega as categorias e perguntas
+      // Carrega as categorias e perguntas para mostrar na tela
       final questionsByCategory = await _questionService.loadAllQuestions();
 
       if (mounted) {
@@ -72,6 +72,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Resto do código inalterado
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -86,7 +87,7 @@ class _MenuScreenState extends State<MenuScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Barra superior com pontos
+              // Barra superior com pontos (inalterado)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 margin: EdgeInsets.only(top: 16, left: 16, right: 16),
@@ -202,7 +203,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                       SizedBox(height: 20),
 
-                      // Grid de temas com perguntas carregadas do JSON
+                      // Grid de temas
                       Expanded(
                         child: isLoading
                             ? Center(
@@ -244,7 +245,7 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  // Método para construir os cards de tema com base nas categorias carregadas
+  // Método para construir os cards de tema
   List<Widget> _buildThemeCards() {
     Map<String, Map<String, dynamic>> themeAssets = {
       'geral': {
@@ -252,11 +253,11 @@ class _MenuScreenState extends State<MenuScreen> {
         'color': Color(0xFF4A90E2),
       },
       'história': {
-        'icon': 'assets/history.png', // Adicione esta imagem aos seus assets
+        'icon': 'assets/history.png',
         'color': Color(0xFFE6526E),
       },
       'ciência': {
-        'icon': 'assets/science.png', // Adicione esta imagem aos seus assets
+        'icon': 'assets/science.png',
         'color': Color(0xFF50C878),
       },
       'futebol': {
@@ -269,7 +270,6 @@ class _MenuScreenState extends State<MenuScreen> {
       },
     };
 
-    // Se não houver categorias carregadas, mostre uma mensagem
     if (_questionsByCategory.isEmpty) {
       return [
         Center(
@@ -284,27 +284,44 @@ class _MenuScreenState extends State<MenuScreen> {
       ];
     }
 
-    // Cria um card para cada categoria disponível
     List<Widget> themeCards = [];
-    _questionsByCategory.forEach((category, questions) {
-      // Usa o mapeamento padrão ou um fallback
+    _questionsByCategory.forEach((category, _) {
       final themeData = themeAssets[category] ?? {
-        'icon': 'assets/globe.png', // Ícone padrão
-        'color': Color(0xFF4A90E2), // Cor padrão
+        'icon': 'assets/globe.png',
+        'color': Color(0xFF4A90E2),
       };
 
       themeCards.add(
         buildThemeCard(
           context,
-          category[0].toUpperCase() + category.substring(1), // Primeira letra maiúscula
+          category[0].toUpperCase() + category.substring(1),
           themeData['icon'],
           themeData['color'],
-              () {
+              () async {
+            // Aqui está a mudança principal: carrega e randomiza as perguntas
+            // toda vez que o usuário seleciona um tema
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            );
+
+            // Carrega perguntas randomizadas para a categoria
+            final randomizedQuestions = await _questionService.loadQuestionsByCategory(category);
+
+            // Remove o diálogo de carregamento
+            Navigator.pop(context);
+
+            // Navega para a tela do quiz com as perguntas randomizadas
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => QuizScreen(
-                  questions: questions,
+                  questions: randomizedQuestions,
                   tema: category[0].toUpperCase() + category.substring(1),
                 ),
               ),
