@@ -748,5 +748,152 @@
       "answers": ["Santos", "Flamengo", "Atlético Mineiro", "São Paulo"],
       "correctAnswerIndex": 2
     }
+  ],
+  "games": [
+    {
+      "questionText": "Qual é o nome do encanador protagonista da franquia Mario?",
+      "answers": ["Luigi", "Toad", "Mario", "Wario"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em qual jogo surgiu o personagem Sonic pela primeira vez?",
+      "answers": ["Sonic Adventure", "Sonic the Hedgehog", "Sonic & Knuckles", "Sonic Heroes"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual empresa desenvolveu a franquia The Legend of Zelda?",
+      "answers": ["Sony", "Nintendo", "Capcom", "Sega"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o nome do protagonista de The Witcher?",
+      "answers": ["Ezio Auditore", "Geralt de Rívia", "Kratos", "Arthur Morgan"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo popular de tiro em primeira pessoa foi lançado em 2007 pela Valve?",
+      "answers": ["Counter-Strike: Global Offensive", "Half-Life 2", "Team Fortress 2", "Portal"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Em qual jogo foi introduzido o personagem Master Chief?",
+      "answers": ["Doom", "Call of Duty", "Halo: Combat Evolved", "Gears of War"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual desses jogos pertence à franquia Resident Evil?",
+      "answers": ["Silent Hill", "The Evil Within", "Resident Evil 4", "Dead Space"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome do primeiro jogo da série Grand Theft Auto?",
+      "answers": ["GTA III", "GTA: San Andreas", "GTA: Vice City", "GTA"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual jogo de mundo aberto se passa na cidade fictícia de Los Santos?",
+      "answers": ["Cyberpunk 2077", "Grand Theft Auto V", "Watch Dogs 2", "Red Dead Redemption 2"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual empresa criou a franquia The Elder Scrolls?",
+      "answers": ["Ubisoft", "Bethesda", "Square Enix", "CD Projekt Red"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo popular foi inspirado em um mod de Warcraft III?",
+      "answers": ["League of Legends", "Hearthstone", "Overwatch", "Valorant"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual jogo de RPG se passa no mundo de Tamriel?",
+      "answers": ["The Witcher 3", "Dark Souls", "The Elder Scrolls V: Skyrim", "Dragon Age"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome do protagonista de Red Dead Redemption 2?",
+      "answers": ["John Marston", "Arthur Morgan", "Dutch Van Der Linde", "Jack Marston"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual desses jogos não é da série Souls?",
+      "answers": ["Bloodborne", "Dark Souls III", "Elden Ring", "Hollow Knight"],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Qual dessas franquias de jogos pertence à Blizzard?",
+      "answers": ["Assassin’s Creed", "World of Warcraft", "The Last of Us", "Metal Gear Solid"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo foi um grande sucesso da Epic Games e popularizou o gênero battle royale?",
+      "answers": ["Apex Legends", "Fortnite", "PUBG", "Call of Duty: Warzone"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual é o nome do dragão roxo protagonista de uma famosa franquia de plataforma?",
+      "answers": ["Crash", "Spyro", "Jak", "Ratchet"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo revolucionou o gênero de sandbox e foi lançado pela Mojang?",
+      "answers": ["Terraria", "Minecraft", "Roblox", "The Sims"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo se passa em um mundo pós-apocalíptico com criaturas chamadas Clickers?",
+      "answers": ["Resident Evil 2", "The Last of Us", "Days Gone", "Dying Light"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Em qual console foi lançado The Legend of Zelda: Breath of the Wild?",
+      "answers": ["PlayStation 4", "Xbox One", "Nintendo Switch", "PC"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual personagem é conhecido por gritar 'It's-a me!'?",
+      "answers": ["Sonic", "Luigi", "Mario", "Bowser"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual franquia de jogos tem como protagonista um caçador de recompensas chamado Samus Aran?",
+      "answers": ["Mega Man", "Metroid", "Halo", "Doom"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual empresa desenvolveu a série de jogos Uncharted?",
+      "answers": ["Ubisoft", "Naughty Dog", "Square Enix", "Rockstar Games"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo é famoso pelo código Konami (↑ ↑ ↓ ↓ ← → ← → B A)?",
+      "answers": ["Street Fighter", "Contra", "Castlevania", "Mega Man"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual desses jogos faz parte da franquia Assassin's Creed?",
+      "answers": ["Far Cry", "Ghost of Tsushima", "Assassin’s Creed: Black Flag", "Sekiro"],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Qual é o nome do protagonista de God of War?",
+      "answers": ["Dante", "Kratos", "Ares", "Zeus"],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Qual jogo indie fez sucesso com uma mecânica de esquiva precisa e chefes desafiadores?",
+      "answers": ["Cuphead", "Hollow Knight", "Shovel Knight", "Celeste"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual desses jogos é um battle royale?",
+      "answers": ["Fall Guys", "CS:GO", "The Division", "Dead Cells"],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Qual jogo famoso começa com o personagem acordando em uma caverna e saindo para explorar um mundo aberto?",
+      "answers": ["Breath of the Wild", "Elden Ring", "Horizon Zero Dawn", "Dark Souls"],
+      "correctAnswerIndex": 0
+    }
   ]
 }

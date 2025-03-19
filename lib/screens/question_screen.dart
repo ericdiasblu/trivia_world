@@ -607,7 +607,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
                     SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        icon: Icon(Icons.skip_next,color: Colors.white,),
+                        icon: Icon(Icons.skip_next,color: answered ? null : Colors.white,),
                         label: Text('Pular'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFA4045F),

@@ -268,6 +268,10 @@ class _MenuScreenState extends State<MenuScreen> {
         'icon': 'assets/movie.png',
         'color': Color(0xFF9966CC),
       },
+      'games': {
+        'icon': 'assets/games.png',
+        'color': Color(0xFF1A73E8),
+      }
     };
 
     if (_questionsByCategory.isEmpty) {

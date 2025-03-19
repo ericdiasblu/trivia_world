@@ -64,6 +64,7 @@ flutter:
     - assets/questions.json
     - assets/history.png
     - assets/science.png
+    - assets/games.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
