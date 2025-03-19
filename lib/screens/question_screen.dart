@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../models/question.dart';
+import '../services/question_service.dart';
 import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -128,12 +129,14 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           score: score,
           totalQuestions: _questions.length,
           tema: widget.tema,
-          onPlayAgain: () {
+          onPlayAgain: () async {
+            // Carregar novas questões randomizadas
+            final newQuestions = await QuestionService().loadQuestionsByCategory(widget.tema.toLowerCase());
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => QuizScreen(
-                  questions: widget.questions,
+                  questions: newQuestions,
                   tema: widget.tema,
                 ),
               ),
@@ -143,6 +146,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
