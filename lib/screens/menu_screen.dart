@@ -7,6 +7,8 @@ import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
 import '../services/question_service.dart';
+// Import the login screen
+import '../screens/login_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -18,6 +20,8 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int userPoints = 0;
   bool isLoading = true;
+  bool isLoggedIn = false; // Track login state
+  String? username; // Store username when logged in
   final QuestionService _questionService = QuestionService();
   Map<String, List<Question>> _questionsByCategory = {};
 
@@ -27,8 +31,9 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     super.initState();
     _loadResources();
+    _checkLoginStatus(); // Check if user is already logged in
 
-    // Inscreva-se para atualizações de pontos
+    // Subscribe to points updates
     _pointsSubscription = PointsManager.pointsStream.listen((points) {
       if (mounted) {
         setState(() {
@@ -44,13 +49,30 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
-  // Método para carregar tanto os pontos quanto as categorias de perguntas
+  // Method to check login status
+  Future<void> _checkLoginStatus() async {
+    // You'll need to implement this based on your authentication method
+    // Example using shared preferences:
+    // final prefs = await SharedPreferences.getInstance();
+    // final loggedIn = prefs.getBool('isLoggedIn') ?? false;
+    // final user = prefs.getString('username');
+
+    // For now, just setting default values
+    if (mounted) {
+      setState(() {
+        isLoggedIn = false;
+        username = null;
+      });
+    }
+  }
+
+  // Method to load both points and question categories
   Future<void> _loadResources() async {
     try {
-      // Carrega os pontos
+      // Load points
       final points = await PointsManager.getPoints();
 
-      // Carrega as categorias e perguntas para mostrar na tela
+      // Load categories and questions to display on screen
       final questionsByCategory = await _questionService.loadAllQuestions();
 
       if (mounted) {
@@ -61,7 +83,7 @@ class _MenuScreenState extends State<MenuScreen> {
         });
       }
     } catch (e) {
-      print('Erro ao carregar recursos: $e');
+      print('Error loading resources: $e');
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -72,7 +94,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Resto do código inalterado
+    // Rest of code unchanged
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -87,92 +109,8 @@ class _MenuScreenState extends State<MenuScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Barra superior com pontos (inalterado)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                margin: EdgeInsets.only(top: 16, left: 16, right: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                  border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.withOpacity(0.2),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.emoji_events,
-                            color: Colors.amber,
-                            size: 24,
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Pontuação',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: isLoading
-                          ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                          : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 20,
-                          ),
-                          SizedBox(width: 6),
-                          Text(
-                            '$userPoints',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Top bar with points and login/profile button
+              _buildTopBar(),
 
               Expanded(
                 child: Container(
@@ -203,7 +141,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                       SizedBox(height: 20),
 
-                      // Grid de temas
+                      // Theme grid
                       Expanded(
                         child: isLoading
                             ? Center(
@@ -232,6 +170,217 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
+  // New method to build the top bar with login button
+  Widget _buildTopBar() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
+        border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Points section
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.emoji_events,
+                  color: Colors.amber,
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 12),
+              Text(
+                'Pontuação',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+          Row(
+            children: [
+              // Points display
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: isLoading
+                    ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+                    : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 20,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      '$userPoints',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Login/Profile button
+              SizedBox(width: 12),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to login screen if not logged in
+                  // or show profile options if logged in
+                  if (!isLoggedIn) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(),
+                      ),
+                    ).then((_) {
+                      // Refresh login status when returning from login screen
+                      _checkLoginStatus();
+                      _updatePoints();
+                    });
+                  } else {
+                    // Show profile options (dialog or navigate to profile screen)
+                    _showProfileOptions();
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isLoggedIn ? Colors.greenAccent.withOpacity(0.2) : Colors.purpleAccent.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    isLoggedIn ? Icons.person : Icons.login,
+                    color: isLoggedIn ? Colors.greenAccent : Colors.purpleAccent,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Method to show profile options when logged in
+  void _showProfileOptions() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Color(0xFF9C156F),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Olá, ${username ?? "Usuário"}!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            _buildProfileOption(Icons.person, 'Meu Perfil', () {
+              Navigator.pop(context);
+              // Navigate to profile screen
+            }),
+            _buildProfileOption(Icons.emoji_events, 'Minhas Conquistas', () {
+              Navigator.pop(context);
+              // Navigate to achievements screen
+            }),
+            _buildProfileOption(Icons.logout, 'Sair', () async {
+              // Implement logout logic
+              // Example:
+              // final prefs = await SharedPreferences.getInstance();
+              // await prefs.setBool('isLoggedIn', false);
+              // await prefs.remove('username');
+
+              if (mounted) {
+                setState(() {
+                  isLoggedIn = false;
+                  username = null;
+                });
+              }
+              Navigator.pop(context);
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build profile option items
+  Widget _buildProfileOption(IconData icon, String text, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white),
+            SizedBox(width: 16),
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _updatePoints() async {
     try {
       final points = await PointsManager.getPoints();
@@ -241,11 +390,11 @@ class _MenuScreenState extends State<MenuScreen> {
         });
       }
     } catch (e) {
-      print('Erro ao atualizar pontos: $e');
+      print('Error updating points: $e');
     }
   }
 
-  // Método para construir os cards de tema
+  // Method to build theme cards
   List<Widget> _buildThemeCards() {
     Map<String, Map<String, dynamic>> themeAssets = {
       'geral': {
@@ -302,34 +451,42 @@ class _MenuScreenState extends State<MenuScreen> {
           themeData['icon'],
           themeData['color'],
               () async {
-            // Aqui está a mudança principal: carrega e randomiza as perguntas
-            // toda vez que o usuário seleciona um tema
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
+
+            try {
+              // Load randomized questions for category
+              final randomizedQuestions = await _questionService.loadQuestionsByCategory(category);
+
+              // Verificar se o contexto ainda é válido
+              if (!context.mounted) return;
+
+              // Remove loading dialog
+              Navigator.pop(context);
+
+              // Navigate to quiz screen with randomized questions
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(
+                    questions: randomizedQuestions,
+                    tema: category[0].toUpperCase() + category.substring(1),
+                  ),
                 ),
-              ),
-            );
+              ).then((_) => _updatePoints());
+            } catch (e) {
+              // Em caso de erro, garantir que o diálogo seja fechado
+              if (context.mounted) {
+                Navigator.pop(context);
 
-            // Carrega perguntas randomizadas para a categoria
-            final randomizedQuestions = await _questionService.loadQuestionsByCategory(category);
-
-            // Remove o diálogo de carregamento
-            Navigator.pop(context);
-
-            // Navega para a tela do quiz com as perguntas randomizadas
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => QuizScreen(
-                  questions: randomizedQuestions,
-                  tema: category[0].toUpperCase() + category.substring(1),
-                ),
-              ),
-            ).then((_) => _updatePoints());
+                // Mostrar mensagem de erro
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Erro ao carregar perguntas: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+              print('Erro ao carregar perguntas: $e');
+            }
           },
         ),
       );

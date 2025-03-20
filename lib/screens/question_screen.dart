@@ -600,7 +600,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
                         ),
                         onPressed: () {
                           _timer.cancel(); // Cancelar o temporizador ao sair
-                          Navigator.pop(context);
+                          Navigator.of(context).pushNamed('/home');
                         },
                       ),
                     ),

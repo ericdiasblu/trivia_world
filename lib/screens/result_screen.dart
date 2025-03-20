@@ -517,7 +517,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
                                   end: Alignment.bottomRight,
                                 ),
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.of(context).pushNamed('/home');
                                 },
                               ),
                             ],

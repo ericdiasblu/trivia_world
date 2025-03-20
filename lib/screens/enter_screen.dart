@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_world/screens/login_screen.dart';
 import 'package:trivia_world/screens/menu_screen.dart';
 import '../widgets/gradient_text.dart';
 import 'dart:math' as math;
@@ -56,7 +57,7 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
         Navigator.push(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const MenuScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => MenuScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
