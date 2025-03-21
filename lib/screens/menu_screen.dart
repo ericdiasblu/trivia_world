@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_world/screens/question_screen.dart';
 import 'package:trivia_world/widgets/build_theme.dart';
 import '../models/question.dart';
@@ -51,17 +52,14 @@ class _MenuScreenState extends State<MenuScreen> {
 
   // Method to check login status
   Future<void> _checkLoginStatus() async {
-    // You'll need to implement this based on your authentication method
-    // Example using shared preferences:
-    // final prefs = await SharedPreferences.getInstance();
-    // final loggedIn = prefs.getBool('isLoggedIn') ?? false;
-    // final user = prefs.getString('username');
+    final prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final user = prefs.getString('username');
 
-    // For now, just setting default values
     if (mounted) {
       setState(() {
-        isLoggedIn = false;
-        username = null;
+        isLoggedIn = loggedIn;
+        username = user;
       });
     }
   }
