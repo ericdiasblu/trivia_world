@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trivia_world/screens/question_screen.dart';
@@ -27,6 +29,9 @@ class _MenuScreenState extends State<MenuScreen> {
   Map<String, List<Question>> _questionsByCategory = {};
 
   StreamSubscription? _pointsSubscription;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -64,11 +69,19 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  // Method to load both points and question categories
+  Future<void> loadUserPoints() async {
+    int points = await PointsManager.getUserPoints();
+    setState(() {
+      userPoints = points;
+    });
+  }
+
   Future<void> _loadResources() async {
+    final User? user = _auth.currentUser;
+
     try {
       // Load points
-      final points = await PointsManager.getPoints();
+      final points = await PointsManager.getUserPoints();
 
       // Load categories and questions to display on screen
       final questionsByCategory = await _questionService.loadAllQuestions();
@@ -148,23 +161,23 @@ class _MenuScreenState extends State<MenuScreen> {
                       // Theme grid
                       Expanded(
                         child:
-                            isLoading
-                                ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                                : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0,
-                                  ),
-                                  child: GridView.count(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 16,
-                                    mainAxisSpacing: 16,
-                                    children: _buildThemeCards(),
-                                  ),
-                                ),
+                        isLoading
+                            ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                            : Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                          ),
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            children: _buildThemeCards(),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -234,36 +247,35 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ),
                 child:
-                    isLoading
-                        ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                        : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.star, color: Colors.amber, size: 20),
-                            SizedBox(width: 6),
-                            Text(
-                              '$userPoints',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                isLoading
+                    ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+                    : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.star, color: Colors.amber, size: 20),
+                    SizedBox(width: 6),
+                    Text(
+                      '$userPoints',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               // Login/Profile button
               SizedBox(width: 12),
               GestureDetector(
-                // Substitua o código de navegação atual por:
                 onTap: () async {
                   if (!isLoggedIn) {
                     final result = await Navigator.push(
@@ -286,15 +298,15 @@ class _MenuScreenState extends State<MenuScreen> {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color:
-                        isLoggedIn
-                            ? Colors.greenAccent.withOpacity(0.2)
-                            : Colors.purpleAccent.withOpacity(0.2),
+                    isLoggedIn
+                        ? Colors.greenAccent.withOpacity(0.2)
+                        : Colors.purpleAccent.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isLoggedIn ? Icons.person : Icons.login,
                     color:
-                        isLoggedIn ? Colors.greenAccent : Colors.purpleAccent,
+                    isLoggedIn ? Colors.greenAccent : Colors.white,
                     size: 24,
                   ),
                 ),
@@ -313,58 +325,92 @@ class _MenuScreenState extends State<MenuScreen> {
       backgroundColor: Colors.transparent,
       builder:
           (context) => Container(
-            padding: EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Color(0xFF9C156F),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
-              ),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Olá, ${username ?? "Usuário"}!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                _buildProfileOption(Icons.person, 'Meu Perfil', () {
-                  Navigator.pop(context);
-                  // Navigate to profile screen
-                }),
-                _buildProfileOption(
-                  Icons.emoji_events,
-                  'Minhas Conquistas',
-                  () {
-                    Navigator.pop(context);
-                    // Navigate to achievements screen
-                  },
-                ),
-                _buildProfileOption(Icons.logout, 'Sair', () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool('isLoggedIn', false);
-                  await prefs.remove('username');
-
-                  if (mounted) {
-                    setState(() {
-                      isLoggedIn = false;
-                      username = null;
-                    });
-                  }
-                  Navigator.pop(context);
-                }),
-              ],
-            ),
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Color(0xFF9C156F),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Olá, ${username ?? "Usuário"}!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            _buildProfileOption(Icons.person, 'Meu Perfil', () {
+              Navigator.pop(context);
+              // Navigate to profile screen
+            }),
+            _buildProfileOption(
+              Icons.emoji_events,
+              'Minhas Conquistas',
+                  () {
+                Navigator.pop(context);
+                // Navigate to achievements screen
+              },
+            ),
+            _buildProfileOption(Icons.logout, 'Sair', () async {
+              try {
+
+                // Sign out from Firebase
+                await FirebaseAuth.instance.signOut();
+
+                // Reset points in PointsManager
+                await PointsManager.resetPoints();
+
+                // Clear preferences
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('isLoggedIn', false);
+                await prefs.remove('username');
+
+                // Close loading dialog
+                if (context.mounted) Navigator.pop(context);
+
+                // Close the bottom sheet
+                if (context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => MenuScreen(),));
+
+                // Update state
+                if (mounted) {
+                  setState(() {
+                    isLoggedIn = false;
+                    username = null;
+                    userPoints = 0;
+                  });
+                }
+              } catch (e) {
+                // Close loading dialog if open
+                if (context.mounted) Navigator.pop(context);
+
+                // Close the bottom sheet
+                if (context.mounted) Navigator.pop(context);
+
+                // Show error
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Erro ao fazer logout: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+                print('Error during logout: $e');
+              }
+            }),
+          ],
+        ),
+      ),
     );
   }
 
@@ -387,7 +433,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Future<void> _updatePoints() async {
     try {
-      final points = await PointsManager.getPoints();
+      final points = await PointsManager.getUserPoints();
       if (mounted) {
         setState(() {
           userPoints = points;
@@ -395,6 +441,15 @@ class _MenuScreenState extends State<MenuScreen> {
       }
     } catch (e) {
       print('Error updating points: $e');
+      // Opcional: Exibir um SnackBar para o usuário
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao atualizar pontos'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -424,7 +479,7 @@ class _MenuScreenState extends State<MenuScreen> {
     _questionsByCategory.forEach((category, _) {
       final themeData =
           themeAssets[category] ??
-          {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
+              {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
 
       themeCards.add(
         buildThemeCard(
@@ -432,7 +487,7 @@ class _MenuScreenState extends State<MenuScreen> {
           category[0].toUpperCase() + category.substring(1),
           themeData['icon'],
           themeData['color'],
-          () async {
+              () async {
             try {
               // Load randomized questions for category
               final randomizedQuestions = await _questionService
@@ -450,9 +505,9 @@ class _MenuScreenState extends State<MenuScreen> {
                 MaterialPageRoute(
                   builder:
                       (context) => QuizScreen(
-                        questions: randomizedQuestions,
-                        tema: category[0].toUpperCase() + category.substring(1),
-                      ),
+                    questions: randomizedQuestions,
+                    tema: category[0].toUpperCase() + category.substring(1),
+                  ),
                 ),
               ).then((_) => _updatePoints());
             } catch (e) {

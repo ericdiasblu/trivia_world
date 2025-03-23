@@ -1,36 +1,97 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PointsManager {
   static const String _pointsKey = 'user_points';
+  static int _points = 0;
 
-  // Stream controller para notificar mudanças de pontos
-  static final _pointsController = StreamController<int>.broadcast();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Getter para acessar o stream
+  // Stream controller to notify point changes
+  static final StreamController<int> _pointsController = StreamController<int>.broadcast();
+
+  // Getter to access the stream
   static Stream<int> get pointsStream => _pointsController.stream;
 
   // Get current points
-  static Future<int> getPoints() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_pointsKey) ?? 0;
+  static Future<int> getUserPoints() async {
+    // Get the current authenticated user
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        // Try to get points from Firestore for logged-in user
+        DocumentSnapshot documentSnapshot =
+        await _firestore.collection('users').doc(user.uid).get();
+
+        if (documentSnapshot.exists) {
+          _points = documentSnapshot.get('points') ?? 0;
+          _pointsController.add(_points);
+          return _points;
+        } else {
+          print("User document not found!");
+          _points = 0;
+          _pointsController.add(_points);
+          return 0;
+        }
+      } catch (e) {
+        print("Error fetching points: $e");
+        _points = 0;
+        _pointsController.add(_points);
+        return 0;
+      }
+    } else {
+      // If not logged in, use 0 as default
+      print("User not authenticated!");
+      _points = 0;
+      _pointsController.add(_points);
+      return 0;
+    }
   }
 
   // Add points and return new total
   static Future<int> addPoints(int points) async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentPoints = prefs.getInt(_pointsKey) ?? 0;
-    final newTotal = currentPoints + points;
-    await prefs.setInt(_pointsKey, newTotal);
+    User? user = _auth.currentUser;
 
-    // Notificar ouvintes sobre a mudança de pontos
-    _pointsController.add(newTotal);
+    if (user != null) {
+      try {
+        // Get current points from Firestore
+        DocumentSnapshot doc = await _firestore.collection('users').doc(user.uid).get();
+        int currentPoints = 0;
 
-    return newTotal;
+        if (doc.exists) {
+          currentPoints = doc.get('points') ?? 0;
+        }
+
+        // Calculate new total
+        int newTotal = currentPoints + points;
+
+        // Update points in Firestore
+        await _firestore.collection('users').doc(user.uid).update({
+          'points': newTotal
+        });
+
+        // Update local points variable and notify listeners
+        _points = newTotal;
+        _pointsController.add(newTotal);
+
+        return newTotal;
+      } catch (e) {
+        print("Error adding points: $e");
+        return _points;
+      }
+    } else {
+      // If not logged in, don't add points
+      print("Cannot add points - user not logged in");
+      return 0;
+    }
   }
 
   // Calculate points based on score and difficulty
-  static int calculatePoints(int score, int totalQuestions, String tema, addPoints) {
+  static int calculatePoints(int score, int totalQuestions, String tema) {
     // Base points for each correct answer
     int basePoints = 10;
 
@@ -62,16 +123,16 @@ class PointsManager {
     return totalPoints;
   }
 
-  // Reset points (for testing)
+  // Reset points (for logout or testing)
   static Future<void> resetPoints() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_pointsKey, 0);
-
-    // Notificar ouvintes que os pontos foram resetados
+    _points = 0;
     _pointsController.add(0);
+
+    // No need to save to shared preferences since we're using Firebase
+    // Instead, we should consider clearing any local caches if needed
   }
 
-  // Dispose do controller quando o app for fechado
+  // Dispose of controller when the app is closed
   static void dispose() {
     _pointsController.close();
   }

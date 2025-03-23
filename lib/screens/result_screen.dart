@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_world/services/firebase_service.dart';
 import '../../services/points_manager.dart';
 import 'dart:math' as math;
 
@@ -81,10 +82,10 @@ class _ResultScreenState extends State<ResultScreen>
       widget.score,
       widget.totalQuestions,
       widget.tema,
-      AuthState().addPoints(earnedPoints),
     );
 
-    totalPoints = await PointsManager.addPoints(earnedPoints);
+    FirebaseService().updateUserPoints(earnedPoints);
+    totalPoints = await PointsManager.getUserPoints();
 
     if (mounted) {
       setState(() {
