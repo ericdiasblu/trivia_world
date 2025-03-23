@@ -116,13 +116,19 @@ class _MenuScreenState extends State<MenuScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
                         child: GradientText(
                           'TEMAS',
                           gradient: LinearGradient(
@@ -141,21 +147,24 @@ class _MenuScreenState extends State<MenuScreen> {
 
                       // Theme grid
                       Expanded(
-                        child: isLoading
-                            ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                            : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            children: _buildThemeCards(),
-                          ),
-                        ),
+                        child:
+                            isLoading
+                                ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                  ),
+                                  child: GridView.count(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 16,
+                                    mainAxisSpacing: 16,
+                                    children: _buildThemeCards(),
+                                  ),
+                                ),
                       ),
                     ],
                   ),
@@ -197,11 +206,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   color: Colors.amber.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.emoji_events,
-                  color: Colors.amber,
-                  size: 24,
-                ),
+                child: Icon(Icons.emoji_events, color: Colors.amber, size: 24),
               ),
               SizedBox(width: 12),
               Text(
@@ -228,67 +233,68 @@ class _MenuScreenState extends State<MenuScreen> {
                     width: 1,
                   ),
                 ),
-                child: isLoading
-                    ? SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ),
-                )
-                    : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 20,
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      '$userPoints',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                child:
+                    isLoading
+                        ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                        : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 20),
+                            SizedBox(width: 6),
+                            Text(
+                              '$userPoints',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
               ),
 
               // Login/Profile button
               SizedBox(width: 12),
               GestureDetector(
-                onTap: () {
-                  // Navigate to login screen if not logged in
-                  // or show profile options if logged in
+                // Substitua o código de navegação atual por:
+                onTap: () async {
                   if (!isLoggedIn) {
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    ).then((_) {
-                      // Refresh login status when returning from login screen
-                      _checkLoginStatus();
-                      _updatePoints();
-                    });
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+
+                    // Se retornou com sucesso
+                    if (result == true) {
+                      await _checkLoginStatus();
+                      await _updatePoints();
+                      setState(() {}); // Força atualização da UI
+                    }
                   } else {
-                    // Show profile options (dialog or navigate to profile screen)
+                    // Show profile options
                     _showProfileOptions();
                   }
                 },
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isLoggedIn ? Colors.greenAccent.withOpacity(0.2) : Colors.purpleAccent.withOpacity(0.2),
+                    color:
+                        isLoggedIn
+                            ? Colors.greenAccent.withOpacity(0.2)
+                            : Colors.purpleAccent.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isLoggedIn ? Icons.person : Icons.login,
-                    color: isLoggedIn ? Colors.greenAccent : Colors.purpleAccent,
+                    color:
+                        isLoggedIn ? Colors.greenAccent : Colors.purpleAccent,
                     size: 24,
                   ),
                 ),
@@ -305,54 +311,60 @@ class _MenuScreenState extends State<MenuScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Color(0xFF9C156F),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-          ),
-          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Olá, ${username ?? "Usuário"}!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      builder:
+          (context) => Container(
+            padding: EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Color(0xFF9C156F),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
               ),
             ),
-            SizedBox(height: 20),
-            _buildProfileOption(Icons.person, 'Meu Perfil', () {
-              Navigator.pop(context);
-              // Navigate to profile screen
-            }),
-            _buildProfileOption(Icons.emoji_events, 'Minhas Conquistas', () {
-              Navigator.pop(context);
-              // Navigate to achievements screen
-            }),
-            _buildProfileOption(Icons.logout, 'Sair', () async {
-              // Implement logout logic
-              // Example:
-              // final prefs = await SharedPreferences.getInstance();
-              // await prefs.setBool('isLoggedIn', false);
-              // await prefs.remove('username');
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Olá, ${username ?? "Usuário"}!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                _buildProfileOption(Icons.person, 'Meu Perfil', () {
+                  Navigator.pop(context);
+                  // Navigate to profile screen
+                }),
+                _buildProfileOption(
+                  Icons.emoji_events,
+                  'Minhas Conquistas',
+                  () {
+                    Navigator.pop(context);
+                    // Navigate to achievements screen
+                  },
+                ),
+                _buildProfileOption(Icons.logout, 'Sair', () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('isLoggedIn', false);
+                  await prefs.remove('username');
 
-              if (mounted) {
-                setState(() {
-                  isLoggedIn = false;
-                  username = null;
-                });
-              }
-              Navigator.pop(context);
-            }),
-          ],
-        ),
-      ),
+                  if (mounted) {
+                    setState(() {
+                      isLoggedIn = false;
+                      username = null;
+                    });
+                  }
+                  Navigator.pop(context);
+                }),
+              ],
+            ),
+          ),
     );
   }
 
@@ -366,13 +378,7 @@ class _MenuScreenState extends State<MenuScreen> {
           children: [
             Icon(icon, color: Colors.white),
             SizedBox(width: 16),
-            Text(
-              text,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
+            Text(text, style: TextStyle(color: Colors.white, fontSize: 16)),
           ],
         ),
       ),
@@ -395,30 +401,12 @@ class _MenuScreenState extends State<MenuScreen> {
   // Method to build theme cards
   List<Widget> _buildThemeCards() {
     Map<String, Map<String, dynamic>> themeAssets = {
-      'geral': {
-        'icon': 'assets/globe.png',
-        'color': Color(0xFF4A90E2),
-      },
-      'história': {
-        'icon': 'assets/history.png',
-        'color': Color(0xFFE6526E),
-      },
-      'ciência': {
-        'icon': 'assets/science.png',
-        'color': Color(0xFF50C878),
-      },
-      'futebol': {
-        'icon': 'assets/soccer.png',
-        'color': Color(0xFFFF9933),
-      },
-      'filmes': {
-        'icon': 'assets/movie.png',
-        'color': Color(0xFF9966CC),
-      },
-      'games': {
-        'icon': 'assets/games.png',
-        'color': Color(0xFF1A73E8),
-      }
+      'geral': {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)},
+      'história': {'icon': 'assets/history.png', 'color': Color(0xFFE6526E)},
+      'ciência': {'icon': 'assets/science.png', 'color': Color(0xFF50C878)},
+      'futebol': {'icon': 'assets/soccer.png', 'color': Color(0xFFFF9933)},
+      'filmes': {'icon': 'assets/movie.png', 'color': Color(0xFF9966CC)},
+      'games': {'icon': 'assets/games.png', 'color': Color(0xFF1A73E8)},
     };
 
     if (_questionsByCategory.isEmpty) {
@@ -426,21 +414,17 @@ class _MenuScreenState extends State<MenuScreen> {
         Center(
           child: Text(
             'Nenhum tema disponível',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 18),
           ),
-        )
+        ),
       ];
     }
 
     List<Widget> themeCards = [];
     _questionsByCategory.forEach((category, _) {
-      final themeData = themeAssets[category] ?? {
-        'icon': 'assets/globe.png',
-        'color': Color(0xFF4A90E2),
-      };
+      final themeData =
+          themeAssets[category] ??
+          {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
 
       themeCards.add(
         buildThemeCard(
@@ -448,11 +432,11 @@ class _MenuScreenState extends State<MenuScreen> {
           category[0].toUpperCase() + category.substring(1),
           themeData['icon'],
           themeData['color'],
-              () async {
-
+          () async {
             try {
               // Load randomized questions for category
-              final randomizedQuestions = await _questionService.loadQuestionsByCategory(category);
+              final randomizedQuestions = await _questionService
+                  .loadQuestionsByCategory(category);
 
               // Verificar se o contexto ainda é válido
               if (!context.mounted) return;
@@ -464,10 +448,11 @@ class _MenuScreenState extends State<MenuScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => QuizScreen(
-                    questions: randomizedQuestions,
-                    tema: category[0].toUpperCase() + category.substring(1),
-                  ),
+                  builder:
+                      (context) => QuizScreen(
+                        questions: randomizedQuestions,
+                        tema: category[0].toUpperCase() + category.substring(1),
+                      ),
                 ),
               ).then((_) => _updatePoints());
             } catch (e) {

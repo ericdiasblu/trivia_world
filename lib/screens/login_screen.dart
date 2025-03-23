@@ -1,5 +1,6 @@
 // login_screen.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/firebase_service.dart';
 
@@ -42,8 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       if (result['success']) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
         // Navigate to the main screen after login
-        Navigator.of(context).pop(); // Return to previous screen instead of replacement
+        Navigator.pop(context, true); // Return to previous screen instead of replacement
       } else {
         setState(() {
           _errorMessage = result['message'];

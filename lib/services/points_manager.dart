@@ -30,7 +30,7 @@ class PointsManager {
   }
 
   // Calculate points based on score and difficulty
-  static int calculatePoints(int score, int totalQuestions, String tema) {
+  static int calculatePoints(int score, int totalQuestions, String tema, addPoints) {
     // Base points for each correct answer
     int basePoints = 10;
 

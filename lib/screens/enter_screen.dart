@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_world/screens/login_screen.dart';
 import 'package:trivia_world/screens/menu_screen.dart';
 import '../widgets/gradient_text.dart';
 import 'dart:math' as math;
@@ -11,7 +10,8 @@ class EnterScreen extends StatefulWidget {
   _EnterScreenState createState() => _EnterScreenState();
 }
 
-class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin {
+class _EnterScreenState extends State<EnterScreen>
+    with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _rotateController;
   late Animation<double> _scaleAnimation;
@@ -34,10 +34,7 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
 
     // Animação para o efeito de escala no título
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(
-        parent: _pulseController,
-        curve: Curves.easeInOut,
-      ),
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
   }
 
@@ -57,8 +54,14 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
         Navigator.push(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => MenuScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            pageBuilder:
+                (context, animation, secondaryAnimation) => MenuScreen(),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: const Duration(milliseconds: 500),
@@ -158,7 +161,6 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
                       ),
                     ),
 
-
                     SizedBox(height: 40),
 
                     // Botão para continuar com animação
@@ -168,7 +170,10 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
                         return Opacity(
                           opacity: 0.5 + _pulseController.value * 0.5,
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 15,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(30),
@@ -190,10 +195,7 @@ class _EnterScreenState extends State<EnterScreen> with TickerProviderStateMixin
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                ),
+                                Icon(Icons.arrow_forward, color: Colors.white),
                               ],
                             ),
                           ),
