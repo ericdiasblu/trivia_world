@@ -261,7 +261,7 @@ class _MenuScreenState extends State<MenuScreen> {
           Row(
             children: [
               // Points display
-              Container(
+              isLoggedIn ? Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
@@ -272,7 +272,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ),
                 child:
-                isLoading
+                isLoading 
                     ? SizedBox(
                   width: 20,
                   height: 20,
@@ -296,7 +296,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     ),
                   ],
                 ),
-              ),
+              ) : SizedBox(),
 
               // Login/Profile button
               SizedBox(width: 12),
