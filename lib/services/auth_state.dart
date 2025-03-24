@@ -61,6 +61,8 @@ class AuthState with ChangeNotifier {
     return result;
   }
 
+  // video utilizado: https://www.youtube.com/watch?v=VCrXSFqdsoA
+  // minuto 2:35
   Future <void> signInWithGoogle() async {
 
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
