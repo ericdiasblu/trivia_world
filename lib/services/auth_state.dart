@@ -1,6 +1,7 @@
 // auth_wrapper.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart'; // Você precisará adicionar o provider ao pubspec.yaml
 import 'package:trivia_world/screens/menu_screen.dart';
 
@@ -58,6 +59,22 @@ class AuthState with ChangeNotifier {
     }
 
     return result;
+  }
+
+  Future <void> signInWithGoogle() async {
+
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken
+    );
+
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    print(userCredential.user?.displayName);
   }
 
   Future<Map<String, dynamic>> register(String username, String email, String password) async {

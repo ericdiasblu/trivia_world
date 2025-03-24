@@ -1,6 +1,7 @@
 // login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trivia_world/services/auth_state.dart';
 
 import '../services/firebase_service.dart';
 
@@ -46,7 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         // Navigate to the main screen after login
-        Navigator.pop(context, true); // Return to previous screen instead of replacement
+        Navigator.pop(
+          context,
+          true,
+        ); // Return to previous screen instead of replacement
       } else {
         setState(() {
           _errorMessage = result['message'];
@@ -81,11 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Logo or app name
-                  Icon(
-                    Icons.quiz,
-                    size: 80,
-                    color: Colors.white,
-                  ),
+                  Icon(Icons.quiz, size: 80, color: Colors.white),
                   SizedBox(height: 16),
                   Text(
                     'Trivia World',
@@ -100,10 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     'Faça login para salvar seu progresso',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                   const SizedBox(height: 32.0),
 
@@ -137,7 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           offset: Offset(0, 3),
                         ),
                       ],
-                      border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.5),
+                        width: 1.5,
+                      ),
                     ),
                     child: Form(
                       key: _formKey,
@@ -148,7 +148,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               labelText: 'Email',
                               labelStyle: TextStyle(color: Colors.white70),
-                              prefixIcon: Icon(Icons.email, color: Colors.white70),
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Colors.white70,
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(color: Colors.white30),
@@ -172,7 +175,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (value == null || value.isEmpty) {
                                 return 'Por favor, insira seu email';
                               }
-                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                              if (!RegExp(
+                                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                              ).hasMatch(value)) {
                                 return 'Por favor, insira um email válido';
                               }
                               return null;
@@ -184,7 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               labelText: 'Senha',
                               labelStyle: TextStyle(color: Colors.white70),
-                              prefixIcon: Icon(Icons.lock, color: Colors.white70),
+                              prefixIcon: Icon(
+                                Icons.lock,
+                                color: Colors.white70,
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(color: Colors.white30),
@@ -228,15 +236,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 12),
                               ),
-                              child: _isLoading
-                                  ? CircularProgressIndicator(color: Colors.white)
-                                  : Text(
-                                'ENTRAR',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child:
+                                  _isLoading
+                                      ? CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                      : Text(
+                                        'ENTRAR',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                             ),
                           ),
                           const SizedBox(height: 16.0),
@@ -248,6 +259,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Não tem uma conta? Cadastre-se',
                               style: TextStyle(color: Colors.white),
                             ),
+                          ),
+
+                          ElevatedButton(
+                            onPressed: () {
+                              AuthState().signInWithGoogle();
+                            },
+                            child: Container(width: 30, height: 30,color: Colors.pink,),
                           ),
 
                           // Skip login option
