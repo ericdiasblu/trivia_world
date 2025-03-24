@@ -270,31 +270,39 @@ class _MenuScreenState extends State<MenuScreen> {
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
                     side: BorderSide(
                       color: Colors.white.withOpacity(0.5),
                       width: 1.5,
                     ),
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.emoji_events, color: Colors.amber),
-                    SizedBox(width: 8),
-                    Text(
-                      'Classificação',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
+                child: Container(
+                  width: 330,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center, // Centraliza os itens
+                    children: [
+                      Icon(Icons.emoji_events, color: Colors.amber),
+                      SizedBox(width: 8), // Espaço menor entre o ícone e o texto
+                      Text(
+                        'Classificação',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+
         ],
       ),
     );

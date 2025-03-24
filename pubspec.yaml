@@ -41,8 +41,7 @@ dependencies:
   intl: ^0.20.2
   provider: ^6.1.2
   google_sign_in: ^6.3.0
-
-
+  flutter_animate: ^4.5.2
 
 dev_dependencies:
   flutter_test:
