@@ -10,7 +10,6 @@ import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
 import '../services/question_service.dart';
-// Import the login screen
 import '../screens/login_screen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -23,8 +22,8 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   int userPoints = 0;
   bool isLoading = true;
-  bool isLoggedIn = false; // Track login state
-  String? username; // Store username when logged in
+  bool isLoggedIn = false;
+  String? username;
   final QuestionService _questionService = QuestionService();
   Map<String, List<Question>> _questionsByCategory = {};
 
@@ -36,10 +35,8 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
-    _loadResources();
-    _checkLoginStatus(); // Check if user is already logged in
+    _initialize();
 
-    // Subscribe to points updates
     _pointsSubscription = PointsManager.pointsStream.listen((points) {
       if (mounted) {
         setState(() {
@@ -56,6 +53,45 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
+  Future<void> _initialize() async {
+    await _checkLoginStatus();
+    await _loadUserData();
+    await _loadResources();
+  }
+
+  Future<void> _loadUserData() async {
+    final User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        final points = await PointsManager.getUserPoints();
+        await _getUser();
+
+        if (mounted) {
+          setState(() {
+            isLoggedIn = true;
+            userPoints = points;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        print('Erro ao carregar dados do usuário: $e');
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+          isLoggedIn = false;
+        });
+      }
+    }
+  }
+
   Future<String?> _getUser() async {
     User? user = _auth.currentUser;
 
@@ -67,22 +103,19 @@ class _MenuScreenState extends State<MenuScreen> {
         if (documentSnapshot.exists) {
           String? fetchedUsername = documentSnapshot.get('username');
           setState(() {
-            username = fetchedUsername ?? 'Usuario'; // Atualiza o estado
+            username = fetchedUsername ?? 'Usuario';
           });
           return username;
         }
       } catch (e) {
-        // Aqui você pode registrar o erro ou re-lançá-lo
         print('Erro ao obter usuário: $e');
-        return null; // Retorna null em caso de erro
+        return null;
       }
     }
 
-    return null; // Retorna null se o usuário não estiver logado
+    return null;
   }
 
-
-  // Method to check login status
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final loggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -94,26 +127,12 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  Future<void> loadUserPoints() async {
-    int points = await PointsManager.getUserPoints();
-    setState(() {
-      userPoints = points;
-    });
-  }
-
   Future<void> _loadResources() async {
-    final User? user = _auth.currentUser;
-
     try {
-      // Load points
-      final points = await PointsManager.getUserPoints();
-
-      // Load categories and questions to display on screen
       final questionsByCategory = await _questionService.loadAllQuestions();
 
       if (mounted) {
         setState(() {
-          userPoints = points;
           _questionsByCategory = questionsByCategory;
           isLoading = false;
         });
@@ -128,9 +147,29 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  Future<void> _updatePoints() async {
+    try {
+      final points = await PointsManager.getUserPoints();
+      if (mounted) {
+        setState(() {
+          userPoints = points;
+        });
+      }
+    } catch (e) {
+      print('Error updating points: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao atualizar pontos'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Rest of code unchanged
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -145,9 +184,7 @@ class _MenuScreenState extends State<MenuScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Top bar with points and login/profile button
               _buildTopBar(),
-
               Expanded(
                 child: Container(
                   margin: EdgeInsets.all(16),
@@ -182,11 +219,8 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                       ),
                       SizedBox(height: 20),
-
-                      // Theme grid
                       Expanded(
-                        child:
-                        isLoading
+                        child: isLoading
                             ? Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,
@@ -215,7 +249,6 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  // New method to build the top bar with login button
   Widget _buildTopBar() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -235,7 +268,6 @@ class _MenuScreenState extends State<MenuScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Points section
           Row(
             children: [
               Container(
@@ -257,12 +289,12 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ],
           ),
-
           Row(
             children: [
-              // Points display
-              isLoggedIn ? Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              isLoggedIn
+                  ? Container(
+                padding:
+                EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(30),
@@ -271,8 +303,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     width: 1,
                   ),
                 ),
-                child:
-                isLoading 
+                child: isLoading
                     ? SizedBox(
                   width: 20,
                   height: 20,
@@ -284,7 +315,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.star, color: Colors.amber, size: 20),
+                    Icon(Icons.star,
+                        color: Colors.amber, size: 20),
                     SizedBox(width: 6),
                     Text(
                       '$userPoints',
@@ -296,9 +328,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     ),
                   ],
                 ),
-              ) : SizedBox(),
-
-              // Login/Profile button
+              )
+                  : SizedBox(),
               SizedBox(width: 12),
               GestureDetector(
                 onTap: () async {
@@ -308,30 +339,27 @@ class _MenuScreenState extends State<MenuScreen> {
                       MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
 
-                    // Se retornou com sucesso
                     if (result == true) {
-                      await _checkLoginStatus();
-                      await _updatePoints();
-                      setState(() {}); // Força atualização da UI
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await _loadUserData();
                     }
                   } else {
-                    // Show profile options
                     _showProfileOptions();
                   }
                 },
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color:
-                    isLoggedIn
+                    color: isLoggedIn
                         ? Colors.greenAccent.withOpacity(0.2)
                         : Colors.purpleAccent.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isLoggedIn ? Icons.person : Icons.login,
-                    color:
-                    isLoggedIn ? Colors.greenAccent : Colors.white,
+                    color: isLoggedIn ? Colors.greenAccent : Colors.white,
                     size: 24,
                   ),
                 ),
@@ -343,13 +371,11 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  // Method to show profile options when logged in
   void _showProfileOptions() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => Container(
+      builder: (context) => Container(
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Color(0xFF9C156F),
@@ -376,52 +402,43 @@ class _MenuScreenState extends State<MenuScreen> {
             SizedBox(height: 20),
             _buildProfileOption(Icons.person, 'Meu Perfil', () {
               Navigator.pop(context);
-              // Navigate to profile screen
             }),
             _buildProfileOption(
               Icons.emoji_events,
               'Minhas Conquistas',
                   () {
                 Navigator.pop(context);
-                // Navigate to achievements screen
               },
             ),
             _buildProfileOption(Icons.logout, 'Sair', () async {
               try {
-
-                // Sign out from Firebase
                 await FirebaseAuth.instance.signOut();
-
-                // Reset points in PointsManager
                 await PointsManager.resetPoints();
 
-                // Clear preferences
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('isLoggedIn', false);
                 await prefs.remove('username');
 
-                // Close loading dialog
-                if (context.mounted) Navigator.pop(context);
-
-                // Close the bottom sheet
-                if (context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => MenuScreen(),));
-
-                // Update state
                 if (mounted) {
                   setState(() {
                     isLoggedIn = false;
                     username = null;
                     userPoints = 0;
+                    isLoading = false;
                   });
                 }
+
+                if (context.mounted) Navigator.pop(context);
+
+                if (context.mounted) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MenuScreen()),
+                  );
+                }
               } catch (e) {
-                // Close loading dialog if open
                 if (context.mounted) Navigator.pop(context);
 
-                // Close the bottom sheet
-                if (context.mounted) Navigator.pop(context);
-
-                // Show error
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -439,7 +456,6 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  // Helper method to build profile option items
   Widget _buildProfileOption(IconData icon, String text, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
@@ -456,29 +472,6 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-  Future<void> _updatePoints() async {
-    try {
-      final points = await PointsManager.getUserPoints();
-      if (mounted) {
-        setState(() {
-          userPoints = points;
-        });
-      }
-    } catch (e) {
-      print('Error updating points: $e');
-      // Opcional: Exibir um SnackBar para o usuário
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erro ao atualizar pontos'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  // Method to build theme cards
   List<Widget> _buildThemeCards() {
     Map<String, Map<String, dynamic>> themeAssets = {
       'geral': {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)},
@@ -502,9 +495,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
     List<Widget> themeCards = [];
     _questionsByCategory.forEach((category, _) {
-      final themeData =
-          themeAssets[category] ??
-              {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
+      final themeData = themeAssets[category] ??
+          {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
 
       themeCards.add(
         buildThemeCard(
@@ -514,33 +506,22 @@ class _MenuScreenState extends State<MenuScreen> {
           themeData['color'],
               () async {
             try {
-              // Load randomized questions for category
-              final randomizedQuestions = await _questionService
-                  .loadQuestionsByCategory(category);
+              final randomizedQuestions =
+              await _questionService.loadQuestionsByCategory(category);
 
-              // Verificar se o contexto ainda é válido
               if (!context.mounted) return;
 
-              // Remove loading dialog
-              Navigator.pop(context);
-
-              // Navigate to quiz screen with randomized questions
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => QuizScreen(
+                  builder: (context) => QuizScreen(
                     questions: randomizedQuestions,
                     tema: category[0].toUpperCase() + category.substring(1),
                   ),
                 ),
               ).then((_) => _updatePoints());
             } catch (e) {
-              // Em caso de erro, garantir que o diálogo seja fechado
               if (context.mounted) {
-                Navigator.pop(context);
-
-                // Mostrar mensagem de erro
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Erro ao carregar perguntas: $e'),

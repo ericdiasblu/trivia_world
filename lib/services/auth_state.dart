@@ -1,13 +1,16 @@
 // auth_wrapper.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart'; // Você precisará adicionar o provider ao pubspec.yaml
 import 'package:trivia_world/screens/menu_screen.dart';
+import 'package:trivia_world/screens/username_screen.dart';
 
 // Tela principal após login/registro
 import '../screens/login_screen.dart';
 import 'firebase_service.dart';
+
 // Estado de autenticação para uso com Provider
 class AuthState with ChangeNotifier {
   final FirebaseService _firebaseService = FirebaseService();
@@ -20,10 +23,15 @@ class AuthState with ChangeNotifier {
   }
 
   User? get user => _user;
+
   Map<String, dynamic>? get userData => _userData;
+
   bool get isLoading => _isLoading;
+
   bool get isLoggedIn => _user != null;
+
   int get userPoints => _userData != null ? _userData!['points'] ?? 0 : 0;
+
   String get username => _userData != null ? _userData!['username'] ?? '' : '';
 
   void _initAuth() {
@@ -61,25 +69,96 @@ class AuthState with ChangeNotifier {
     return result;
   }
 
-  // video utilizado: https://www.youtube.com/watch?v=VCrXSFqdsoA
-  // minuto 2:35
-  Future <void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      // Configurar o GoogleSignIn para mostrar a caixa de seleção de conta
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+          'profile',
+        ],
+      );
 
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      // Forçar a seleção de conta
+      await googleSignIn.signOut(); // Logout primeiro para garantir a seleção de conta
 
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken
-    );
+      if (googleUser == null) {
+        // Usuário cancelou o login
+        return;
+      }
 
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-    print(userCredential.user?.displayName);
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // Buscar dados do usuário no Firestore
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        // Verificar se o usuário já existe e tem username
+        if (userDoc.exists) {
+          Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+
+          // Se o username já existir e não for vazio, não redireciona para UsernameScreen
+          if (userData != null &&
+              userData.containsKey('username') &&
+              userData['username'] != null &&
+              userData['username'].toString().trim().isNotEmpty) {
+            // Já tem username, então pode ir direto para o MenuScreen
+            if (context.mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MenuScreen()),
+              );
+              return;
+            }
+          }
+        }
+
+        // Criar/atualizar documento do usuário se não tiver username
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'username': user.displayName ?? user.email?.split('@').first,
+          'email': user.email,
+          'points': 0, // Manter os pontos como estavam
+          'createdAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        // Carregar dados do usuário
+        await refreshUserData();
+
+        // Navegar para UsernameScreen para permitir edição do username
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => UsernameScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      print("Erro ao fazer login: $e");
+      // Opcional: Mostrar uma mensagem de erro ao usuário
+    }
   }
 
-  Future<Map<String, dynamic>> register(String username, String email, String password) async {
+
+  Future<Map<String, dynamic>> register(
+    String username,
+    String email,
+    String password,
+  ) async {
     final result = await _firebaseService.registerUser(
       username: username,
       email: email,
@@ -118,11 +197,7 @@ class AuthWrapper extends StatelessWidget {
     final authState = Provider.of<AuthState>(context);
 
     if (authState.isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (authState.isLoggedIn) {

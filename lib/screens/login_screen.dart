@@ -263,10 +263,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           ElevatedButton(
                             onPressed: () {
-                              AuthState().signInWithGoogle();
+                              AuthState().signInWithGoogle(context);
                             },
-                            child: Container(width: 30, height: 30,color: Colors.pink,),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                              minimumSize: Size(30, 30),
+                            ),
+                            child: Image.asset(
+                              'assets/google_icon.png',
+                              width: 24,
+                              height: 24,
+                            ),
                           ),
+
 
                           // Skip login option
                           TextButton(
