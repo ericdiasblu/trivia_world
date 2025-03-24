@@ -44,6 +44,7 @@ class _MenuScreenState extends State<MenuScreen> {
       if (mounted) {
         setState(() {
           userPoints = points;
+          _getUser();
         });
       }
     });
@@ -55,16 +56,40 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
+  Future<String?> _getUser() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        DocumentSnapshot documentSnapshot =
+        await _firestore.collection('users').doc(user.uid).get();
+
+        if (documentSnapshot.exists) {
+          String? fetchedUsername = documentSnapshot.get('username');
+          setState(() {
+            username = fetchedUsername ?? 'Usuario'; // Atualiza o estado
+          });
+          return username;
+        }
+      } catch (e) {
+        // Aqui você pode registrar o erro ou re-lançá-lo
+        print('Erro ao obter usuário: $e');
+        return null; // Retorna null em caso de erro
+      }
+    }
+
+    return null; // Retorna null se o usuário não estiver logado
+  }
+
+
   // Method to check login status
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final loggedIn = prefs.getBool('isLoggedIn') ?? false;
-    final user = prefs.getString('username');
 
     if (mounted) {
       setState(() {
         isLoggedIn = loggedIn;
-        username = user;
       });
     }
   }
@@ -341,7 +366,7 @@ class _MenuScreenState extends State<MenuScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Olá, ${username ?? "Usuário"}!',
+              'Olá, $username!',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
