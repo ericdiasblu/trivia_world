@@ -11,6 +11,7 @@ import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
 import '../services/question_service.dart';
 import '../screens/login_screen.dart';
+import 'leaderboard_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -168,86 +169,138 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  void _navigateToLeaderboard() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LeaderboardScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF9C156F), Colors.deepPurpleAccent],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildTopBar(),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1,
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF9C156F), Colors.deepPurpleAccent],
+              ),
+            ),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  _buildTopBar(),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            child: GradientText(
+                              'TEMAS',
+                              gradient: LinearGradient(
+                                colors: [Colors.white, Colors.pinkAccent],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Expanded(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                                : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                              ),
+                              child: GridView.count(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                children: _buildThemeCards(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: GradientText(
-                          'TEMAS',
-                          gradient: LinearGradient(
-                            colors: [Colors.white, Colors.pinkAccent],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Expanded(
-                        child: isLoading
-                            ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                            : Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                          ),
-                          child: GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            children: _buildThemeCards(),
-                          ),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+            ),
+          ),
+
+          // Leaderboard Button
+          Positioned(
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: ElevatedButton(
+                onPressed: _navigateToLeaderboard,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.2),
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: BorderSide(
+                      color: Colors.white.withOpacity(0.5),
+                      width: 1.5,
+                    ),
                   ),
                 ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.emoji_events, color: Colors.amber),
+                    SizedBox(width: 8),
+                    Text(
+                      'Classificação',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
+
+
 
   Widget _buildTopBar() {
     return Container(
@@ -391,82 +444,178 @@ class _MenuScreenState extends State<MenuScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Olá, $username!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF6A11CB), // Deep Purple
+                    Color(0xFF2575FC), // Bright Blue
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              margin: EdgeInsets.only(bottom: 20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    'Olá, $username!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20),
-            _buildProfileOption(Icons.person, 'Meu Perfil', () {
-              Navigator.pop(context);
-            }),
             _buildProfileOption(
-              Icons.emoji_events,
-              'Minhas Conquistas',
-                  () {
+              icon: Icons.person,
+              text: 'Meu Perfil',
+              color: Color(0xFF6A11CB),
+              onTap: () {
                 Navigator.pop(context);
               },
             ),
-            _buildProfileOption(Icons.logout, 'Sair', () async {
-              try {
-                await FirebaseAuth.instance.signOut();
-                await PointsManager.resetPoints();
+            _buildProfileOption(
+              icon: Icons.emoji_events,
+              text: 'Minhas Conquistas',
+              color: Color(0xFF2575FC),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            _buildProfileOption(
+              icon: Icons.logout,
+              text: 'Sair',
+              color: Colors.red.shade400,
+              onTap: () async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  await PointsManager.resetPoints();
 
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('isLoggedIn', false);
-                await prefs.remove('username');
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('isLoggedIn', false);
+                  await prefs.remove('username');
 
-                if (mounted) {
-                  setState(() {
-                    isLoggedIn = false;
-                    username = null;
-                    userPoints = 0;
-                    isLoading = false;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      isLoggedIn = false;
+                      username = null;
+                      userPoints = 0;
+                      isLoading = false;
+                    });
+                  }
+
+                  if (context.mounted) Navigator.pop(context);
+
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => MenuScreen()),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) Navigator.pop(context);
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Erro ao fazer logout: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                  print('Error during logout: $e');
                 }
-
-                if (context.mounted) Navigator.pop(context);
-
-                if (context.mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MenuScreen()),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) Navigator.pop(context);
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Erro ao fazer logout: $e'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-                print('Error during logout: $e');
-              }
-            }),
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileOption(IconData icon, String text, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white),
-            SizedBox(width: 16),
-            Text(text, style: TextStyle(color: Colors.white, fontSize: 16)),
-          ],
+  // Helper method for profile options
+  Widget _buildProfileOption({
+    required IconData icon,
+    required String text,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(
+                    icon,
+                    color: color,
+                    size: 24,
+                  ),
+                ),
+                SizedBox(width: 15),
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+                Spacer(),
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
