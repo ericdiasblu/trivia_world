@@ -1,4 +1,3 @@
-// firebase_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -6,25 +5,13 @@ class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Método para registrar um novo usuário
+  // Método para registrar um novo usuário com verificação de email
   Future<Map<String, dynamic>> registerUser({
     required String email,
     required String password,
     required String username,
   }) async {
     try {
-
-      // Criar usuário com email e senha
-      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      // Importante: espere um momento para garantir que o token de autenticação esteja disponível
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await userCredential.user?.getIdToken(true);
-
       // Verificar se o username já existe
       final usernameCheck = await _firestore
           .collection('users')
@@ -38,17 +25,31 @@ class FirebaseService {
         };
       }
 
+      // Criar usuário com email e senha
+      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Importante: espere um momento para garantir que o token de autenticação esteja disponível
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Enviar email de verificação
+      await userCredential.user?.sendEmailVerification();
+
       // Criar documento do usuário no Firestore
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         'username': username,
         'email': email,
         'points': 0,
+        'emailVerified': false,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
       return {
         'success': true,
         'user': userCredential.user,
+        'needsVerification': true,
       };
     } on FirebaseAuthException catch (e) {
       String message;
@@ -77,7 +78,7 @@ class FirebaseService {
     }
   }
 
-  // Método para fazer login
+  // Método para fazer login com verificação de email
   Future<Map<String, dynamic>> loginUser({
     required String email,
     required String password,
@@ -87,6 +88,21 @@ class FirebaseService {
         email: email,
         password: password,
       );
+
+      // Verificar se o email foi verificado
+      if (!userCredential.user!.emailVerified) {
+        return {
+          'success': false,
+          'needsVerification': true,
+          'message': 'Por favor, verifique seu email antes de fazer login.',
+          'user': userCredential.user,
+        };
+      }
+
+      // Atualizar status de verificação no Firestore
+      await _firestore.collection('users').doc(userCredential.user!.uid).update({
+        'emailVerified': true,
+      });
 
       return {
         'success': true,
@@ -120,6 +136,41 @@ class FirebaseService {
         'message': 'Ocorreu um erro: $e',
       };
     }
+  }
+
+  // Método para reenviar email de verificação
+  Future<Map<String, dynamic>> resendVerificationEmail() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        return {
+          'success': true,
+          'message': 'Email de verificação reenviado.',
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Não foi possível reenviar o email de verificação.',
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Erro ao reenviar email de verificação: $e',
+      };
+    }
+  }
+
+  // Método para verificar se o email do usuário atual está verificado
+  Future<bool> isEmailVerified() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      // Recarregar usuário para obter status atualizado
+      await user.reload();
+      return user.emailVerified;
+    }
+    return false;
   }
 
   // Método para fazer logout

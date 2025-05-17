@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "617147240174",
+    "firebase_url": "https://trivia-world-ea0ef-default-rtdb.firebaseio.com",
     "project_id": "trivia-world-ea0ef",
     "storage_bucket": "trivia-world-ea0ef.firebasestorage.app"
   },
@@ -19,6 +20,14 @@
           "android_info": {
             "package_name": "com.example.trivia_world",
             "certificate_hash": "ec0925d08ccf3c02d39eec6db064fb90990fa7e4"
+          }
+        },
+        {
+          "client_id": "617147240174-pn94fptml2fqg64abb9jaas3ip8g86kd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trivia_world",
+            "certificate_hash": "2f01314900d69793fdd63b6c77a448d76296e327"
           }
         },
         {

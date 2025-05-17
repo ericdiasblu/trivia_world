@@ -664,7 +664,7 @@ class _MenuScreenState extends State<MenuScreen> {
               () async {
             try {
               final randomizedQuestions =
-              await _questionService.loadQuestionsByCategory(category);
+              await _questionService.loadQuestionsByTheme(category);
 
               if (!context.mounted) return;
 

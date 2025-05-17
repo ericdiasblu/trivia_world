@@ -131,7 +131,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           tema: widget.tema,
           onPlayAgain: () async {
             // Carregar novas questões randomizadas
-            final newQuestions = await QuestionService().loadQuestionsByCategory(widget.tema.toLowerCase());
+            final newQuestions = await QuestionService().loadQuestionsByTheme(widget.tema.toLowerCase());
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
