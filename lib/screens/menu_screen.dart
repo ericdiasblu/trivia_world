@@ -639,17 +639,6 @@ class _MenuScreenState extends State<MenuScreen> {
       'games': {'icon': 'assets/games.png', 'color': Color(0xFF1A73E8)},
     };
 
-    if (_questionsByCategory.isEmpty) {
-      return [
-        Center(
-          child: Text(
-            'Nenhum tema disponível',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        ),
-      ];
-    }
-
     List<Widget> themeCards = [];
     _questionsByCategory.forEach((category, _) {
       final themeData = themeAssets[category] ??
