@@ -1,11 +1,14 @@
+// lib/screens/menu_screen.dart
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trivia_world/screens/question_screen.dart';
-import 'package:trivia_world/widgets/build_theme.dart';
+import 'package:trivia_world/screens/question_screen.dart'; // Usado dentro da lógica de navegação
+import 'package:trivia_world/screens/theme_selection_screen.dart'; // IMPORTADO
+// import 'package:trivia_world/widgets/build_theme.dart'; // Removido, pois _buildThemeCards foi removido
+import '../models/game_mode.dart'; // IMPORTADO
 import '../models/question.dart';
 import '../widgets/gradient_text.dart';
 import '../services/points_manager.dart';
@@ -36,13 +39,18 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void initState() {
     super.initState();
+    // Inicia isLoading como true aqui para garantir que o CircularProgressIndicator apareça
+    // antes mesmo de _initialize começar, se houver algum delay.
+    // _initialize também irá gerenciar o isLoading.
+    // setState(() { isLoading = true; }); // Removido daqui, _initialize vai cuidar
     _initialize();
 
     _pointsSubscription = PointsManager.pointsStream.listen((points) {
       if (mounted) {
         setState(() {
           userPoints = points;
-          _getUser();
+          // _getUser(); // Chamada redundante se _loadUserData já atualiza username.
+          // Se precisar atualizar o username em tempo real com os pontos, mantenha.
         });
       }
     });
@@ -55,39 +63,35 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Future<void> _initialize() async {
+    if (mounted) setState(() { isLoading = true; }); // Garante que isLoading é true no início
     await _checkLoginStatus();
     await _loadUserData();
-    await _loadResources();
+    await _loadResources(); // Este deve ser o último a setar isLoading = false
   }
 
   Future<void> _loadUserData() async {
     final User? user = _auth.currentUser;
-
+    // Não modifique isLoading aqui diretamente. Deixe _loadResources controlar o final.
     if (user != null) {
       try {
         final points = await PointsManager.getUserPoints();
-        await _getUser();
+        await _getUser(); // _getUser já faz setState para username
 
         if (mounted) {
           setState(() {
             isLoggedIn = true;
             userPoints = points;
-            isLoading = false;
           });
         }
       } catch (e) {
         print('Erro ao carregar dados do usuário: $e');
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-        }
       }
     } else {
       if (mounted) {
         setState(() {
-          isLoading = false;
           isLoggedIn = false;
+          // Se não há usuário, e as perguntas ainda não foram carregadas,
+          // isLoading deve permanecer true até _loadResources terminar.
         });
       }
     }
@@ -95,17 +99,17 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Future<String?> _getUser() async {
     User? user = _auth.currentUser;
-
     if (user != null) {
       try {
         DocumentSnapshot documentSnapshot =
         await _firestore.collection('users').doc(user.uid).get();
-
         if (documentSnapshot.exists) {
           String? fetchedUsername = documentSnapshot.get('username');
-          setState(() {
-            username = fetchedUsername ?? 'Usuario';
-          });
+          if (mounted) {
+            setState(() {
+              username = fetchedUsername ?? 'Usuario';
+            });
+          }
           return username;
         }
       } catch (e) {
@@ -113,14 +117,12 @@ class _MenuScreenState extends State<MenuScreen> {
         return null;
       }
     }
-
     return null;
   }
 
   Future<void> _checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final loggedIn = prefs.getBool('isLoggedIn') ?? false;
-
     if (mounted) {
       setState(() {
         isLoggedIn = loggedIn;
@@ -129,20 +131,22 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Future<void> _loadResources() async {
+    // Se _initialize não setou isLoading = true, garante aqui.
+    if (!isLoading && mounted) setState(() { isLoading = true; });
+
     try {
       final questionsByCategory = await _questionService.loadAllQuestions();
-
       if (mounted) {
         setState(() {
           _questionsByCategory = questionsByCategory;
-          isLoading = false;
+          isLoading = false; // *** Ponto principal onde isLoading vira false ***
         });
       }
     } catch (e) {
       print('Error loading resources: $e');
       if (mounted) {
         setState(() {
-          isLoading = false;
+          isLoading = false; // Também vira false em caso de erro
         });
       }
     }
@@ -174,6 +178,114 @@ class _MenuScreenState extends State<MenuScreen> {
       context,
       MaterialPageRoute(builder: (context) => LeaderboardScreen()),
     );
+  }
+
+  // MÉTODO PARA CONSTRUIR CARDS DE MODO DE JOGO
+  List<Widget> _buildGameModeCards() {
+    if (availableGameModes.isEmpty) {
+      return [
+        Center(
+          child: Text(
+            'Nenhum modo de jogo disponível.',
+            style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18),
+          ),
+        ),
+      ];
+    }
+
+    return availableGameModes.map((mode) {
+      return Card(
+        elevation: 4,
+        color: mode.color.withOpacity(0.8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {
+            if (mode.type == GameModeType.classic) {
+              // Não verificamos isLoading aqui, pois o build principal já faz isso.
+              // Se chegamos aqui, isLoading é false.
+              if (_questionsByCategory.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Nenhum tema encontrado para o modo clássico.')),
+                );
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ThemeSelectionScreen(
+                    questionsByCategory: _questionsByCategory,
+                    onThemeSelected: (String category) async {
+                      try {
+                        final randomizedQuestions =
+                        await _questionService.loadQuestionsByTheme(category);
+                        if (!context.mounted) return;
+                        if (randomizedQuestions.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Nenhuma pergunta para ${category[0].toUpperCase() + category.substring(1)}.'),
+                              backgroundColor: Colors.orange,
+                            ),
+                          );
+                          return;
+                        }
+                        // Guardar o navigator da ThemeSelectionScreen para poder dar pop nele
+                        final themeScreenNavigator = Navigator.of(context);
+
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuizScreen(
+                              questions: randomizedQuestions,
+                              tema: category[0].toUpperCase() + category.substring(1),
+                            ),
+                          ),
+                        );
+                        // Após o QuizScreen ser fechado (pop),
+                        // o código aqui será executado.
+                        themeScreenNavigator.pop(); // Fecha a ThemeSelectionScreen
+                        _updatePoints();
+
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Erro ao carregar perguntas: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                        print('Erro ao carregar perguntas: $e');
+                      }
+                    },
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Modo "${mode.name}" ainda não implementado.')),
+              );
+            }
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(mode.icon, size: 60, color: Colors.white),
+              SizedBox(height: 10),
+              Text(
+                mode.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
   }
 
   @override
@@ -215,7 +327,9 @@ class _MenuScreenState extends State<MenuScreen> {
                               vertical: 10,
                             ),
                             child: GradientText(
-                              'TEMAS',
+                              // ***** ALTERAÇÃO PRINCIPAL AQUI *****
+                              'MODOS DE JOGO', // Alterado de 'TEMAS'
+                              // ***** FIM DA ALTERAÇÃO PRINCIPAL *****
                               gradient: LinearGradient(
                                 colors: [Colors.white, Colors.pinkAccent],
                                 begin: Alignment.topLeft,
@@ -230,13 +344,14 @@ class _MenuScreenState extends State<MenuScreen> {
                           ),
                           SizedBox(height: 20),
                           Expanded(
-                            child: isLoading
+                            child: isLoading // Verifica se os recursos (perguntas) ainda estão carregando
                                 ? Center(
                               child: CircularProgressIndicator(
                                 color: Colors.white,
+                                strokeWidth: 3, // Aumentado para melhor visibilidade
                               ),
                             )
-                                : Padding(
+                                : Padding( // Se não está carregando, mostra os cards de modo de jogo
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
                               ),
@@ -244,7 +359,9 @@ class _MenuScreenState extends State<MenuScreen> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 16,
                                 mainAxisSpacing: 16,
-                                children: _buildThemeCards(),
+                                // ***** ALTERAÇÃO PRINCIPAL AQUI *****
+                                children: _buildGameModeCards(), // Alterado de _buildThemeCards()
+                                // ***** FIM DA ALTERAÇÃO PRINCIPAL *****
                               ),
                             ),
                           ),
@@ -256,7 +373,6 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-
           // Leaderboard Button
           Positioned(
             bottom: 16,
@@ -281,13 +397,13 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ),
                 child: Container(
-                  width: 330,
+                  width: 330, // Considere usar MediaQuery para largura responsiva
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center, // Centraliza os itens
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.emoji_events, color: Colors.amber),
-                      SizedBox(width: 8), // Espaço menor entre o ícone e o texto
+                      SizedBox(width: 8),
                       Text(
                         'Classificação',
                         style: TextStyle(
@@ -302,12 +418,10 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
-
 
 
   Widget _buildTopBar() {
@@ -627,61 +741,5 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
       ),
     );
-  }
-
-  List<Widget> _buildThemeCards() {
-    Map<String, Map<String, dynamic>> themeAssets = {
-      'geral': {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)},
-      'história': {'icon': 'assets/history.png', 'color': Color(0xFFE6526E)},
-      'ciência': {'icon': 'assets/science.png', 'color': Color(0xFF50C878)},
-      'futebol': {'icon': 'assets/soccer.png', 'color': Color(0xFFFF9933)},
-      'filmes': {'icon': 'assets/movie.png', 'color': Color(0xFF9966CC)},
-      'games': {'icon': 'assets/games.png', 'color': Color(0xFF1A73E8)},
-    };
-
-    List<Widget> themeCards = [];
-    _questionsByCategory.forEach((category, _) {
-      final themeData = themeAssets[category] ??
-          {'icon': 'assets/globe.png', 'color': Color(0xFF4A90E2)};
-
-      themeCards.add(
-        buildThemeCard(
-          context,
-          category[0].toUpperCase() + category.substring(1),
-          themeData['icon'],
-          themeData['color'],
-              () async {
-            try {
-              final randomizedQuestions =
-              await _questionService.loadQuestionsByTheme(category);
-
-              if (!context.mounted) return;
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuizScreen(
-                    questions: randomizedQuestions,
-                    tema: category[0].toUpperCase() + category.substring(1),
-                  ),
-                ),
-              ).then((_) => _updatePoints());
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Erro ao carregar perguntas: $e'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-              print('Erro ao carregar perguntas: $e');
-            }
-          },
-        ),
-      );
-    });
-
-    return themeCards;
   }
 }
