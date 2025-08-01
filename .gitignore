@@ -43,3 +43,59 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase configuration files (contains sensitive API keys)
+**/google-services.json
+**/GoogleService-Info.plist
+lib/firebase_options.dart
+
+# Environment variables and sensitive configuration
+.env
+.env.*
+!.env.example
+*.env
+
+# API keys and secrets
+**/api_keys.dart
+**/secrets.dart
+**/config.dart
+
+# Signing keys and certificates
+*.keystore
+*.jks
+key.properties
+android/key.properties
+ios/Runner/GoogleService-Info.plist
+
+# Local configuration
+local.properties
+android/local.properties
+
+# IDE specific files with potential sensitive data
+.vscode/settings.json
+.idea/workspace.xml
+
+# Crashlytics and analytics
+**/crashlytics-build.properties
+**/fabric.properties
+
+# Fastlane
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+**/fastlane/Appfile
+**/fastlane/Fastfile
+
+# Platform specific sensitive files
+# iOS
+ios/Runner/Runner.entitlements
+ios/firebase_app_id_file.json
+ios/Runner/GoogleService-Info.plist
+
+# macOS  
+macos/Runner/GoogleService-Info.plist
+macos/firebase_app_id_file.json
+
+# Web
+web/firebase-config.js
